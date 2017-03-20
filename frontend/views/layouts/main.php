@@ -36,7 +36,7 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Products', 'url' => ['/site/products']],
+        ['label' => 'Products', 'url' => ['/product']],
         ['label' => 'Import', 'url' => ['/import/index']]
     ];
 
@@ -63,6 +63,35 @@ AppAsset::register($this);
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        $('#w0-collapse a:last').on('click', function(e) {
+            var linkUrl = $(this).attr('href');
+            var password = prompt('Enter admin password', '0000');
+            if (password) {
+                $.ajax({
+                    url: '/import/login',
+                    method: 'GET',
+                    data: {
+                        password: password
+                    },
+                    success: function(a, b, c) {
+                        a = $.parseJSON(a);
+                        if (a.success) {
+                            window.location = linkUrl;
+                        } else {
+                            alert('Password is wrong');
+                        }
+                    }
+                });
+            }
+
+            e.preventDefault();
+            return false;
+        });
+    });
+</script>
 
 <?php $this->endBody() ?>
 </body>
