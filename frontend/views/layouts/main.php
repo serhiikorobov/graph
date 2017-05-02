@@ -37,8 +37,27 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'Products', 'url' => ['/product']],
-        ['label' => 'Import', 'url' => ['/import/index']]
+        //['label' => 'Import', 'url' => ['/import/index']]
     ];
+
+    if (Yii::$app->user->isGuest) {
+        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+    } else {
+        $menuItems[] = [
+            'label' => 'Events',
+            'url' => ['/event']
+        ];
+
+        $menuItems[] = '<li>'
+            . Html::beginForm(['/site/logout'], 'post')
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>';
+    }
 
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
@@ -65,7 +84,7 @@ AppAsset::register($this);
 </footer>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    /*document.addEventListener("DOMContentLoaded", function() {
         $('#w0-collapse a:last').on('click', function(e) {
             var linkUrl = $(this).attr('href');
             var password = prompt('Enter admin password', '0000');
@@ -90,7 +109,7 @@ AppAsset::register($this);
             e.preventDefault();
             return false;
         });
-    });
+    });*/
 </script>
 
 <?php $this->endBody() ?>
