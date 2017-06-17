@@ -91,15 +91,24 @@ use \Yii;
  */
 class Event extends ActiveRecord
 {
-    //const DATETIME_INTERNAL_FORMAT = '';
+    const DATE_INTERNAL_FORMAT = 'n/j/Y';
     const DATETIME_INTERNAL_FORMAT = 'Y-m-d H:i:s';
     const DATETIME_INTERNAL_FORMAT_JS = 'yyyy-MM-dd HH:mm:ss';
+
+    public static function tableName()
+    {
+        return '{{%event}}';
+    }
 
     public function rules()
     {
         $allFields = array_keys($this->attributeLabels());
 
         return [
+            [
+                ['short_name', 'tier', 'date_start', 'date_end'],
+                'required'
+            ],
             [
                 ['short_name', 'website', 'comments', 'event_quarter'],
                 'string',
@@ -313,5 +322,39 @@ class Event extends ActiveRecord
             'tier' => Yii::t('app', 'Tier'),
             'event_quarter' => Yii::t('app', 'Event Quarter'),*/
         ];
+    }
+
+    public static function getVenues(array $tiers = null, \DateTime $from = null, \DateTime $to = null)
+    {
+        $query = static::find();
+
+        if (!is_null($tiers)) {
+            $query->andWhere(['IN', 'tier', $tiers]);
+        }
+
+        if (!is_null($from)) {
+            $query->andWhere(['>=', 'date_start', $from->format(self::DATETIME_INTERNAL_FORMAT)]);
+        }
+
+        if (!is_null($to)) {
+            $query->andWhere(['<=', 'date_start', $to->format(self::DATETIME_INTERNAL_FORMAT)]);
+        }
+
+        return $query->all();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAvailableTiers()
+    {
+        $query = static::find();
+        $query->select(['tier'])
+            ->groupBy('tier')
+            ->orderBy(['tier' => SORT_ASC]);
+
+        $tiers = $query->createCommand()->queryColumn();
+
+        return $tiers;
     }
 }

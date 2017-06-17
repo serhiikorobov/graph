@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $model \frontend\models\site\Index */
 
-$this->title = 'My Yii Application';
+$this->title = 'Graph';
 $this->registerJsFile('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js');
 //$this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.js', array('depends' => ['yii\web\YiiAsset']));
 //$this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/inputmask/inputmask.date.extensions.js', array('depends' => ['yii\web\YiiAsset']));

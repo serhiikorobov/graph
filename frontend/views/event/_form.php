@@ -65,6 +65,12 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             }
         }
 
+        $isRequired = false;
+        if ($model->isAttributeRequired($attribute)) {
+            $options['aria-required'] = 'true';
+            $isRequired = true;
+        }
+
         $startDate = null;
         if ($model->$attribute) {
             if ($startDate = \DateTime::createFromFormat(Event::DATETIME_INTERNAL_FORMAT, $model->$attribute)) {
@@ -72,7 +78,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             }
         }
 
-        echo '<div class="form-group field-event-' . $attribute . ' ' . ($model->hasErrors($attribute) ? 'has-error' : '') . '">';
+        echo '<div class="form-group field-event-' . $attribute . ' ' . ($model->hasErrors($attribute) ? 'has-error' : '') . ($isRequired ? ' required' : '') . '">';
 
         echo Html::activeLabel($model, $attribute);
 
@@ -117,6 +123,12 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
             <?= $form->field($model, 'website')->textInput(['maxlength' => true]) ?>
+
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <?= $form->field($model, 'tier')->dropDownList($tier->getOptions()) ?>
+                </div>
+            </div>
 
             <div class="form-group row">
                 <div class="col-md-6">
@@ -322,18 +334,15 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             </div>
 
             <div class="form-group row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <?= $form->field($model, 'costs', [
                             'template' => "{label}\n<div class='input-group'><span class='input-group-addon'>$</span>{input}</div>\n{hint}\n{error}",
                         ])->textInput(['maxlength' => true]) ?>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <?= $form->field($model, 'shipping_costs', [
                             'template' => "{label}\n<div class='input-group'><span class='input-group-addon'>$</span>{input}</div>\n{hint}\n{error}",
                         ])->textInput(['maxlength' => true]) ?>
-                </div>
-                <div class="col-md-4">
-                    <?= $form->field($model, 'tier')->dropDownList($tier->getOptions()) ?>
                 </div>
             </div>
 

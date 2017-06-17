@@ -12,8 +12,24 @@ use common\models\Event as EventBase;
 
 class Event extends EventBase
 {
-    public static function tableName()
+    /**
+     * @return number
+     */
+    public function getGlobalTier()
     {
-        return '{{%event}}';
+        return $this->tier;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStartDate()
+    {
+        return \DateTime::createFromFormat(self::DATETIME_INTERNAL_FORMAT, $this->date_start);
+    }
+
+    public function getevent_name()
+    {
+        return $this->short_name;
     }
 } 

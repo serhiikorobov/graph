@@ -9,7 +9,7 @@
 namespace frontend\models\site;
 
 
-use common\models\Venue;
+use frontend\models\Event;
 use yii\base\Model;
 
 class Index extends Model
@@ -64,7 +64,7 @@ class Index extends Model
     public function getChartData()
     {
         $data = array();
-        /* @var $venue Venue */
+        /* @var $venue Event */
         foreach ($this->venues as $venue) {
             $date = $venue->getStartDate();
             $tier = $venue->getGlobalTier();
@@ -78,8 +78,10 @@ class Index extends Model
                 'data' => array(array(
                     'x' => $date->getTimestamp() * 1000,
                     'y' => $tier,
-                    'r' => $venue->scenario == Venue::SCENARIO_INTERNAL ? 6 : 4,
-                    'venueType' => $venue->scenario,
+                    //'r' => $venue->scenario == Venue::SCENARIO_INTERNAL ? 6 : 4,
+                    'r' => 4,
+                    //'venueType' => $venue->scenario,
+                    'venueType' => 'external',
                 )),
                 'backgroundColor' => $color,
                 'hoverBackgroundColor' => $color
@@ -91,17 +93,7 @@ class Index extends Model
 
     public function getTierOptions()
     {
-        $values = array();
-        /* @var $venue Venue */
-        foreach (Venue::getVenues() as $venue) {
-            $tier = $venue->getGlobalTier();
-            if ($tier) {
-                $values[] = $tier;
-            }
-        }
-
-        $values = array_unique($values);
-        sort($values);
+        $values = Event::getAvailableTiers();
 
         $options = array();
         $default = array(
@@ -143,7 +135,7 @@ class Index extends Model
                 $tiers = null;
             }
 
-            $venues = Venue::getVenues($tiers, $date, $dateTo);
+            $venues = Event::getVenues($tiers, $date, $dateTo);
             $this->_venues = $venues;
         }
 
