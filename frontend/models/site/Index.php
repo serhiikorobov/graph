@@ -11,6 +11,7 @@ namespace frontend\models\site;
 
 use frontend\models\Event;
 use yii\base\Model;
+use yii\helpers\Url;
 
 class Index extends Model
 {
@@ -73,7 +74,12 @@ class Index extends Model
             }
             $color = '#' . substr(md5(rand()), 0, 6);
 
+            $controller = \Yii::$app->controller;
+
+            $url = Url::to(['site/view?id=' . $venue->getPrimaryKey()]);
+
             $data[] = array(
+                'url' => $url,
                 'label' => $venue->event_name,
                 'data' => array(array(
                     'x' => $date->getTimestamp() * 1000,

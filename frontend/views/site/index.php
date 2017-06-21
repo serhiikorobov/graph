@@ -77,6 +77,31 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
     </div>
 </div>
 
+<style type="text/css">
+    #chartjs-tooltip {
+        opacity: 1;
+        position: absolute;
+        background: rgba(0, 0, 0, .7);
+        color: white;
+        border-radius: 3px;
+        -webkit-transition: all .1s ease;
+        transition: all .1s ease;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+    }
+
+    #chartjs-tooltip a {
+        color: #c0c0c0;
+    }
+
+    .chartjs-tooltip-key {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-right: 10px;
+    }
+</style>
+
 <script>
 
     /* Chart.types.Bubble.extend({
@@ -155,6 +180,74 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
             }
         });
 
+        var customTooltips = function(tooltip) {
+            // Tooltip Element
+            var tooltipEl = document.getElementById('chartjs-tooltip');
+
+            if (!tooltipEl) {
+                tooltipEl = document.createElement('div');
+                tooltipEl.id = 'chartjs-tooltip';
+                tooltipEl.innerHTML = "<table></table>"
+                this._chart.canvas.parentNode.appendChild(tooltipEl);
+            }
+
+            // Hide if no tooltip
+            if (tooltip.opacity === 0) {
+                //tooltipEl.style.opacity = 0;
+                return;
+            }
+
+            // Set caret Position
+            tooltipEl.classList.remove('above', 'below', 'no-transform');
+            if (tooltip.yAlign) {
+                tooltipEl.classList.add(tooltip.yAlign);
+            } else {
+                tooltipEl.classList.add('no-transform');
+            }
+
+            function getBody(bodyItem) {
+                return bodyItem.lines;
+            }
+
+            // Set Text
+            if (tooltip.body) {
+                var titleLines = tooltip.title || [];
+                var bodyLines = tooltip.body.map(getBody);
+
+                var innerHtml = '<thead>';
+
+                titleLines.forEach(function(title) {
+                    innerHtml += '<tr><th>' + title + '</th></tr>';
+                });
+                innerHtml += '</thead><tbody>';
+
+                bodyLines.forEach(function(body, i) {
+                    var colors = tooltip.labelColors[i];
+                    var style = 'background:' + colors.backgroundColor;
+                    style += '; border-color:' + colors.borderColor;
+                    style += '; border-width: 2px';
+                    var span = '<span class="chartjs-tooltip-key" style="' + style + '"></span>';
+                    innerHtml += '<tr><td>' + span + body + '</td></tr>';
+                });
+                innerHtml += '</tbody>';
+
+                var tableRoot = tooltipEl.querySelector('table');
+                tableRoot.innerHTML = innerHtml;
+            }
+
+            var positionY = this._chart.canvas.offsetTop;
+            var positionX = this._chart.canvas.offsetLeft;
+
+            // Display, position, and set styles for font
+            tooltipEl.style.opacity = 1;
+            tooltipEl.style.left = positionX + tooltip.caretX + 'px';
+            tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+            tooltipEl.style.fontFamily = tooltip._fontFamily;
+            tooltipEl.style.fontSize = tooltip.fontSize;
+            tooltipEl.style.fontStyle = tooltip._fontStyle;
+            tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+        };
+
         var myChart = new Chart(jQuery('#myChart'), {
             type: 'bubble',
             responsive: true,
@@ -207,6 +300,11 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
                 },
 
                 tooltips: {
+                    enabled: false,
+                    //mode: 'index',
+                    position: 'nearest',
+                    custom: customTooltips,
+
                     callbacks: {
                         title: function(tooltipItems, data) {
                             var index = tooltipItems[0].datasetIndex;
@@ -218,7 +316,10 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
                             var obj = data.datasets[index];
                             var point = obj.data[0];
 
-                            return 'Event start date ' + formatDate(new Date(point.x));
+                            var html = 'Event start date ' + formatDate(new Date(point.x));
+                            html += '<br/><a href="' + obj.url + '">View more details</a>';
+
+                            return html;
                         }
                     }
                 }

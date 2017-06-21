@@ -15,6 +15,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use Yii;
+use frontend\models\Event;
 
 class SiteController extends Controller
 {
@@ -96,5 +97,21 @@ class SiteController extends Controller
         \Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionView()
+    {
+        $eventId = \Yii::$app->getRequest()->get('id');
+
+        if ($eventId) {
+            $event = Event::findOne(['id' => $eventId]);
+            if ($event) {
+                return $this->render('view', [
+                        'model' => $event
+                    ]);
+            }
+        }
+
+        return $this->redirect('/site/index');
     }
 }
