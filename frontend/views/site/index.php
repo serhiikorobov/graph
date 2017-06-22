@@ -317,7 +317,7 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
                             var point = obj.data[0];
 
                             var html = 'Event start date ' + formatDate(new Date(point.x));
-                            html += '<br/><a href="' + obj.url + '">View more details</a>';
+                            html += '<br/><a href="' + obj.url + '" target="_blank">View more details</a>';
 
                             return html;
                         }
