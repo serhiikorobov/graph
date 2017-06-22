@@ -1,78 +1,67 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Event */
+/* @var $form yii\widgets\ActiveForm */
 
-$this->title = $model->short_name;
+use \common\models\Event;
+
+$yesNoSource = new \common\models\event\source\YesNo();
+$audienceSource = new \common\models\event\source\Audience();
+$typeServiceSource = new \common\models\event\source\TypeServices();
+$logisticsSource = new \common\models\event\source\Logistics();
+$levelOfSupport = new \common\models\event\source\LevelOfSupport();
+$submitter = new \common\models\event\source\Submitter();
+$eventType = new \common\models\event\source\EventType();
+$tier = new \common\models\event\source\Tier();
+$objectivesSource = new \common\models\event\source\Objectives();
+
+use kartik\datetime\DateTimePicker;
+
+$addTooltip = function (\yii\widgets\ActiveField $field) {
+    /*$field->inputOptions['title'] = 'korobov';
+    $field->inputOptions['data-toggle'] = 'tooltip';
+    $field->inputOptions['data-placement'] = 'left';*/
+
+    $tooltip = $field->model->attributeTooltip();
+    if (isset($tooltip[$field->attribute])) {
+        $message = $tooltip[$field->attribute];
+
+        $field->inputOptions['title'] = $message;
+        $field->inputOptions['data-toggle'] = 'tooltip';
+        $field->inputOptions['data-placement'] = 'left';
+
+        /*
+        $field->inputOptions['data-toggle'] = 'popover';
+        $field->inputOptions['data-trigger'] = 'focus';
+        $field->inputOptions['title'] = $field->model->getAttributeLabel($field->attribute);
+        $field->inputOptions['data-content'] = $message;
+        $field->inputOptions['data-placement'] = 'left';*/
+
+    }
+
+    return $field;
+};
 
 ?>
-<div class="event-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<h1><?= Html::encode($model->short_name) ?></h1>
 
-    <?= DetailView::widget([
-            'model' => $model,
-            'attributes' => [
-                'id',
-                'short_name',
-                'description:ntext',
-                'website',
-                'date_start',
-                'date_end',
-                'location:ntext',
-                'venue_name:ntext',
-                'goals:ntext',
-                'audience',
-                'audience_size',
-                'products:ntext',
-                'experiences:ntext',
-                'nda',
-                'audience_persons:ntext',
-                'expectations:ntext',
-                'customers:ntext',
-                'partners:ntext',
-                'comments:ntext',
-                'apm:ntext',
-                'atme:ntext',
-                'a_v',
-                'stage',
-                'logistics_date_start',
-                'logistics_date_end',
-                'tear_down_date_start',
-                'tear_down_date_end',
-                'logistics',
-                'arrival_date',
-                'departure_date',
-                'layout_stage:ntext',
-                'layout_demo_area:ntext',
-                'level_of_support',
-                'budget',
-                'cost_center',
-                'requester:ntext',
-                'submitter',
-                'group:ntext',
-                'event_type',
-                'number',
-                'objectives',
-                'sponsor',
-                'keynote',
-                'booth',
-                'sate_lite',
-                'meeting',
-                'nda_suite',
-                'sessions',
-                'demos',
-                'training',
-                'launch',
-                'pr',
-                'costs',
-                'shipping_costs',
-                'tier',
-                'event_quarter',
-            ],
-        ]) ?>
+<?= $this->render('//event/_form', [
+        'model' => $model,
+    ]) ?>
 
-</div>
+<style type="text/css">
+    .form-group button {
+        display: none;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        jQuery('input,select,textarea').prop('disabled', true);
+    });
+</script>
