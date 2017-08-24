@@ -109,7 +109,7 @@ class Event extends ActiveRecord
 
         return [
             [
-                ['short_name', 'tier', 'date_start', 'date_end'],
+                ['short_name', 'tier', 'date_start', 'location'],
                 'required'
             ],
             [
