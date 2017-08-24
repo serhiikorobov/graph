@@ -204,4 +204,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public static function isAdminExist()
+    {
+        $count = static::find()
+            ->andWhere(['role' => \frontend\models\User::ROLE_SUPER_ADMIN])->count();
+
+        return (bool)$count;
+    }
 }

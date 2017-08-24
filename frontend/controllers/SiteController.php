@@ -12,6 +12,7 @@ use common\models\LoginForm;
 use common\models\Venue;
 use frontend\models\Product;
 use frontend\models\SignupForm;
+use frontend\models\User;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -54,7 +55,7 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
-        if ($model->load(\Yii::$app->request->post())) {
+        if (!User::isAdminExist() && $model->load(\Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (\Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
