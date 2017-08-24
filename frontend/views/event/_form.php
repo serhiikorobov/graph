@@ -49,7 +49,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
 ?>
 
 <div class="event-form">
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'event_form']); ?>
 
     <?php
     $generateDateWidget = function($attribute) use ($model, $form) {
@@ -113,97 +113,161 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
         <li role="presentation" class="active"><a href="#basic_info"><?php echo Yii::t('app', 'Basic Info') ?></a></li>
         <li role="presentation"><a href="#about"><?php echo Yii::t('app', 'About') ?></a></li>
         <li role="presentation"><a href="#logistics"><?php echo Yii::t('app', 'Logistics') ?></a></li>
-        <li role="presentation"><a href="#other"><?php echo Yii::t('app', 'Other') ?></a></li>
+        <li role="presentation"><a href="#comments"><?php echo Yii::t('app', 'Comments') ?></a></li>
     </ul>
 
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="basic_info">
-            <?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'tier')->dropDownList($tier->getOptions()) ?>
+                </div>
+            </div>
 
             <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
             <?= $form->field($model, 'website')->textInput(['maxlength' => true]) ?>
 
             <div class="form-group row">
-                <div class="col-md-12">
-                    <?= $form->field($model, 'tier')->dropDownList($tier->getOptions()) ?>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <?php echo $generateDateWidget('date_start'); ?>
                 </div>
-
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <?php echo $generateDateWidget('date_end'); ?>
                 </div>
+                <div class="col-md-4">
+                    <?= $form->field($model, 'event_quarter')->textInput(['maxlength' => true]) ?>
+                </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-md-6">
-                    <?= $form->field($model, 'location')->textarea(['rows' => 6]) ?>
+                    <?= $form->field($model, 'location')->textarea(['rows' => 2]) ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $form->field($model, 'venue_name')->textarea(['rows' => 6]) ?>
+                    <?= $form->field($model, 'venue_name')->textarea(['rows' => 2]) ?>
                 </div>
             </div>
+
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'atme')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'apm')->textInput(['maxlength' => true]) ?>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <?= $addTooltip($form->field($model, 'requester'))->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $form->field($model, 'submitter')->dropDownList($submitter->getOptions())  ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $form->field($model, 'event_type')->dropDownList($eventType->getOptions()) ?>
+                </div>
+
+            </div>
+
+
         </div>
         <div role="tabpanel" class="tab-pane" id="about">
-            <?= $addTooltip($form->field($model, 'goals'))->textarea(['rows' => 6]) ?>
+            <?= $addTooltip($form->field($model, 'goals'))->textarea(['rows' => 2]) ?>
 
             <div class="form-group row">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <?= $addTooltip($form->field($model, 'audience'))->dropDownList($audienceSource->getOptions()); ?>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <?php echo $addTooltip($form->field($model, 'audience_size'))->textInput(['maxlength' => true]); ?>
                 </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-6">
-                    <?= $addTooltip($form->field($model, 'products'))->textarea(['rows' => 6]) ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $addTooltip($form->field($model, 'experiences'))->textarea(['rows' => 6]) ?>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <?php echo $addTooltip($form->field($model, 'nda'))->dropDownList($yesNoSource->getOptions()) ?>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-md-6">
-                    <?= $addTooltip($form->field($model, 'audience_persons'))->textarea(['rows' => 6]) ?>
+                    <?= $addTooltip($form->field($model, 'products'))->textarea(['rows' => 2]) ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $addTooltip($form->field($model, 'expectations'))->textarea(['rows' => 6]) ?>
+                    <?= $addTooltip($form->field($model, 'experiences'))->textarea(['rows' => 2]) ?>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-md-6">
-                    <?= $addTooltip($form->field($model, 'customers'))->textarea(['rows' => 6]) ?>
+                    <?= $addTooltip($form->field($model, 'audience_persons'))->textarea(['rows' => 2]) ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $addTooltip($form->field($model, 'partners'))->textarea(['rows' => 6]) ?>
+                    <?= $addTooltip($form->field($model, 'expectations'))->textarea(['rows' => 2]) ?>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-md-6">
-                    <?= $addTooltip($form->field($model, 'comments'))->textarea(['rows' => 6]) ?>
+                    <?= $addTooltip($form->field($model, 'customers'))->textarea(['rows' => 2]) ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $form->field($model, 'apm')->textarea(['rows' => 6]) ?>
+                    <?= $addTooltip($form->field($model, 'partners'))->textarea(['rows' => 2]) ?>
                 </div>
             </div>
 
-            <?= $form->field($model, 'atme')->textarea(['rows' => 6]) ?>
+            <div class="form-group row">
+                <div class="col-md-4">
+                    <?= $form->field($model, 'group')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $form->field($model, 'number')->textInput(['maxlength' => true]); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $addTooltip($form->field($model, 'objectives'))->dropDownList($objectivesSource->getOptions()); ?>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <?= $form->field($model, 'keynote')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'booth')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'sate_lite')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'meeting')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <?= $form->field($model, 'nda_suite')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'sessions')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'demos')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'training')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'launch')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'pr')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+            </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="logistics">
 
@@ -213,6 +277,15 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                 </div>
                 <div class="col-md-2">
                     <?= $addTooltip($form->field($model, 'stage'))->dropDownList($typeServiceSource->getOptions()) ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'catering')->textInput(['maxlength' => true]);  ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'network')->textInput(['maxlength' => true]);  ?>
+                </div>
+                <div class="col-md-2">
+                    <?= $form->field($model, 'security')->textInput(['maxlength' => true]);  ?>
                 </div>
             </div>
 
@@ -271,82 +344,23 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                     <?= $addTooltip($form->field($model, 'cost_center'))->textInput(['maxlength' => true]) ?>
                 </div>
             </div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="other">
-            <?= $addTooltip($form->field($model, 'requester'))->textarea(['rows' => 6]) ?>
-
-            <?= $form->field($model, 'submitter')->dropDownList($submitter->getOptions())  ?>
-
-            <?= $form->field($model, 'group')->textarea(['rows' => 6]) ?>
-
-            <div class="form-group row">
-                <div class="col-md-3">
-                    <?= $form->field($model, 'event_type')->dropDownList($eventType->getOptions()) ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'number')->textInput(['maxlength' => true]); ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $addTooltip($form->field($model, 'objectives'))->dropDownList($objectivesSource->getOptions()); ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'sponsor')->dropDownList($yesNoSource->getOptions()); ?>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-3">
-                    <?= $form->field($model, 'keynote')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'booth')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'sate_lite')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'meeting')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-3">
-                    <?= $form->field($model, 'nda_suite')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'sessions')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'demos')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'training')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <div class="col-md-6">
-                    <?= $form->field($model, 'launch')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'pr')->dropDownList($yesNoSource->getOptions()) ?>
-                </div>
-            </div>
 
             <div class="form-group row">
                 <div class="col-md-6">
                     <?= $form->field($model, 'costs', [
-                            'template' => "{label}\n<div class='input-group'><span class='input-group-addon'>$</span>{input}</div>\n{hint}\n{error}",
-                        ])->textInput(['maxlength' => true]) ?>
+                        'template' => "{label}\n<div class='input-group'><span class='input-group-addon'>$</span>{input}</div>\n{hint}\n{error}",
+                    ])->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-md-6">
                     <?= $form->field($model, 'shipping_costs', [
-                            'template' => "{label}\n<div class='input-group'><span class='input-group-addon'>$</span>{input}</div>\n{hint}\n{error}",
-                        ])->textInput(['maxlength' => true]) ?>
+                        'template' => "{label}\n<div class='input-group'><span class='input-group-addon'>$</span>{input}</div>\n{hint}\n{error}",
+                    ])->textInput(['maxlength' => true]) ?>
                 </div>
             </div>
-
-            <?= $form->field($model, 'event_quarter')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="comments">
+            <?= $form->field($model, 'sponsor')->dropDownList($yesNoSource->getOptions()); ?>
+            <?= $addTooltip($form->field($model, 'comments'))->textarea(['rows' => 6]) ?>
         </div>
     </div>
 
@@ -372,14 +386,21 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             $('[data-toggle="popover"]').popover()
         });
 
+        function moveToError() {
+            var errorControl = $('.has-error:first');
+            var panel = errorControl.parents('.tab-pane:first');
+            var panelId = panel.attr('id');
+            $('a[href=\\#' + panelId + ']').trigger('click');
+            setTimeout(function() {
+                errorControl.find('input,select,textarea').focus();
+            }, 10);
+        }
 
-        var errorControl = $('.has-error:first');
-        var panel = errorControl.parents('.tab-pane:first');
-        var panelId = panel.attr('id');
-        $('a[href=\\#' + panelId + ']').trigger('click');
-        setTimeout(function() {
-            errorControl.find('input,select,textarea').focus();
-        }, 10);
+        moveToError();
+
+        $('#event_form').on('submit', function (e) {
+            moveToError();
+        });
     });
 </script>
 

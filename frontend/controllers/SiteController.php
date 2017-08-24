@@ -10,6 +10,7 @@ namespace frontend\controllers;
 
 use common\models\LoginForm;
 use common\models\Venue;
+use frontend\models\Product;
 use frontend\models\SignupForm;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -102,13 +103,28 @@ class SiteController extends Controller
     public function actionView()
     {
         $eventId = \Yii::$app->getRequest()->get('id');
-
-        if ($eventId) {
-            $event = Event::findOne(['id' => $eventId]);
-            if ($event) {
-                return $this->render('view', [
-                        'model' => $event
-                    ]);
+        $type = \Yii::$app->getRequest()->get('type');
+        switch ($type) {
+            case 'product': {
+                if ($eventId) {
+                    $product = Product::findOne(['id' => $eventId]);
+                    if ($product) {
+                        return $this->render('view', [
+                            'model' => $product
+                        ]);
+                    }
+                }
+            }
+            break;
+            default: {
+                if ($eventId) {
+                    $event = Event::findOne(['id' => $eventId]);
+                    if ($event) {
+                        return $this->render('view', [
+                            'model' => $event
+                        ]);
+                    }
+                }
             }
         }
 

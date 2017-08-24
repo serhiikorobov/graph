@@ -10,6 +10,7 @@ namespace frontend\models\site;
 
 
 use frontend\models\Event;
+use frontend\models\Product;
 use yii\base\Model;
 use yii\helpers\Url;
 
@@ -76,7 +77,11 @@ class Index extends Model
 
             $controller = \Yii::$app->controller;
 
-            $url = Url::to(['site/view?id=' . $venue->getPrimaryKey()]);
+            if ($tier == 0) {
+                $url = Url::to(['site/view/', 'id' => $venue->getPrimaryKey(), 'type' => 'product']);
+            } else {
+                $url = Url::to(['site/view?id=' . $venue->getPrimaryKey()]);
+            }
 
             $data[] = array(
                 'url' => $url,
@@ -87,7 +92,7 @@ class Index extends Model
                     //'r' => $venue->scenario == Venue::SCENARIO_INTERNAL ? 6 : 4,
                     'r' => 4,
                     //'venueType' => $venue->scenario,
-                    'venueType' => 'external',
+                    'venueType' => $tier > 0 ? 'external' : 'internal',
                 )),
                 'backgroundColor' => $color,
                 'hoverBackgroundColor' => $color
@@ -142,6 +147,8 @@ class Index extends Model
             }
 
             $venues = Event::getVenues($tiers, $date, $dateTo);
+            $venues = array_merge($venues, Product::find()->all());
+
             $this->_venues = $venues;
         }
 

@@ -86,6 +86,9 @@ use \Yii;
  * @property double $shipping_costs Shipping Costs	textbox: shipping costs	$	(numeric,$)
  * @property string $tier Tier	dropdown: tier	1/2/3/4/5/unknown	(dropdown)
  * @property string $event_quarter Event Quarter	(autocalculate)
+ * @property string $catering
+ * @property string $network
+ * @property string $security
  *
  * @package common\models
  */
@@ -110,7 +113,7 @@ class Event extends ActiveRecord
                 'required'
             ],
             [
-                ['short_name', 'website', 'comments', 'event_quarter'],
+                ['short_name', 'website', 'comments', 'event_quarter', 'catering', 'network', 'security'],
                 'string',
                 'max' => 255
             ],
@@ -211,8 +214,8 @@ class Event extends ActiveRecord
             'date_start' => Yii::t('app', 'Date Start'),
             'date_end' => Yii::t('app', 'Date End'),
             'location' => Yii::t('app', 'Location'),
-            'venue_name' => Yii::t('app', 'Location Venue'),
-            'goals' => Yii::t('app', 'Goals and Objectives'),
+            'venue_name' => Yii::t('app', 'Venue'),
+            'goals' => Yii::t('app', 'Goals'),
             'audience' => Yii::t('app', 'Audiences'),
             'audience_size' => Yii::t('app', 'Audience size'),
             'products' => Yii::t('app', 'Shared Product(s)'),
@@ -222,7 +225,7 @@ class Event extends ActiveRecord
             'expectations' => Yii::t('app', 'Audience’s Expectation'),
             'partners' => Yii::t('app', 'Partners'),
             'customers' => Yii::t('app', 'Customers'),
-            'comments' => Yii::t('app', 'Questions to Consider'),
+            'comments' => Yii::t('app', 'Comments'),
             'apm' => Yii::t('app', 'Assigned PM'),
             'atme' => Yii::t('app', 'Assigned TME'),
             'a_v' => Yii::t('app', 'A/V Services'),
@@ -260,6 +263,9 @@ class Event extends ActiveRecord
             'shipping_costs' => Yii::t('app', 'Shipping Costs'),
             'tier' => Yii::t('app', 'Tier'),
             'event_quarter' => Yii::t('app', 'Event Quarter'),
+            'catering' => Yii::t('app', 'Catering'),
+            'network' => Yii::t('app', 'Network'),
+            'security' => Yii::t('app', 'Security'),
         ];
     }
 
@@ -283,7 +289,7 @@ class Event extends ActiveRecord
             'expectations' => Yii::t('app', 'What is the audience’s expectation?'),
             'partners' => Yii::t('app', 'Are any specific partners involved, expected to be featured?'),
             'customers' => Yii::t('app', 'Are any specific customers involved, expected to be featured?'),
-            'comments' => Yii::t('app', 'Additional questions to consider'),
+            //'comments' => Yii::t('app', 'Additional questions to consider'),
             /*'apm' => Yii::t('app', 'Assigned PM'),
             'atme' => Yii::t('app', 'Assigned TME'),*/
             'a_v' => Yii::t('app', 'Depending on scope of event/meeting/speakership- who is providing A/V services'),
@@ -332,6 +338,8 @@ class Event extends ActiveRecord
             $query->andWhere(['IN', 'tier', $tiers]);
         }
 
+        $query->andWhere(['<>', 'tier', 0]);
+
         if (!is_null($from)) {
             $query->andWhere(['>=', 'date_start', $from->format(self::DATETIME_INTERNAL_FORMAT)]);
         }
@@ -350,6 +358,7 @@ class Event extends ActiveRecord
     {
         $query = static::find();
         $query->select(['tier'])
+            ->andWhere(['<>', 'tier', 0])
             ->groupBy('tier')
             ->orderBy(['tier' => SORT_ASC]);
 

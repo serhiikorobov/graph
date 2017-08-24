@@ -3,17 +3,33 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Event;
-use frontend\models\event\Search;
+use frontend\models\User;
+use frontend\models\user\Edit;
+use frontend\models\user\Serach;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * EventController implements the CRUD actions for Event model.
+ * UserController implements the CRUD actions for User model.
  */
-class EventController extends AuthController
+class UserController extends AuthController
 {
+    public function beforeAction($action)
+    {
+        $result = parent::beforeAction($action);
+
+        if ($result) {
+            $user = \Yii::$app->getUser()->getIdentity();
+            if ($user->role != \frontend\models\User::ROLE_SUPER_ADMIN) {
+                $result = false;
+                $this->goHome();
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @inheritdoc
      */
@@ -30,12 +46,12 @@ class EventController extends AuthController
     }
 
     /**
-     * Lists all Event models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new Search();
+        $searchModel = new Serach();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +61,7 @@ class EventController extends AuthController
     }
 
     /**
-     * Displays a single Event model.
+     * Displays a single User model.
      * @param integer $id
      * @return mixed
      */
@@ -57,13 +73,13 @@ class EventController extends AuthController
     }
 
     /**
-     * Creates a new Event model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Event();
+        $model = new Edit();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +91,7 @@ class EventController extends AuthController
     }
 
     /**
-     * Updates an existing Event model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -94,7 +110,7 @@ class EventController extends AuthController
     }
 
     /**
-     * Deletes an existing Event model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,15 +123,15 @@ class EventController extends AuthController
     }
 
     /**
-     * Finds the Event model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Event the loaded model
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Event::findOne($id)) !== null) {
+        if (($model = Edit::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

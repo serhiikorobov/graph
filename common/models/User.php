@@ -20,12 +20,15 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property integer $role
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    const ROLE_SUPER_ADMIN = 10;
+    const ROLE_ADMIN = 5;
 
     /**
      * @inheritdoc
@@ -51,8 +54,23 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            ['username', 'trim'],
+            [
+                ['status', 'email', 'username', 'role'],
+                'required'
+            ],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+
+            ['email', 'trim'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'message' => 'This email address has already been taken.'],
+
+            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['username', 'unique', 'message' => 'This username has already been taken.'],
+
+            ['role', 'in', 'range' => [self::ROLE_ADMIN, self::ROLE_SUPER_ADMIN]]
         ];
     }
 

@@ -48,11 +48,18 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
 
 ?>
 
-<h1><?= Html::encode($model->short_name) ?></h1>
+<h1><?= Html::encode($model->short_name) . sprintf('(ID:%s)', $model->getPrimaryKey()) ?></h1>
 
-<?= $this->render('//event/_form', [
+<?php if ($model->getGlobalTier() == 0): ?>
+    <?= $this->render('//product/_form', [
         'model' => $model,
     ]) ?>
+<?php else: ?>
+    <?= $this->render('//event/_form', [
+        'model' => $model,
+    ]) ?>
+<?php endif; ?>
+
 
 <style type="text/css">
     .form-group button {

@@ -36,18 +36,28 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Products', 'url' => ['/product']],
+        //['label' => 'Products', 'url' => ['/product']],
         //['label' => 'Import', 'url' => ['/import/index']]
     ];
 
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        //$menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = [
             'label' => 'Events',
             'url' => ['/event']
         ];
+
+        $menuItems[] = [
+            'label' => 'Product launch',
+            'url' => ['/product']
+        ];
+
+        $user = Yii::$app->getUser()->getIdentity();
+        if ($user->role == \frontend\models\User::ROLE_SUPER_ADMIN) {
+            $menuItems[] = ['label' => 'Users', 'url' => ['/user/index']];
+        }
 
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
