@@ -96,7 +96,8 @@ class Event extends ActiveRecord
 {
     const DATE_INTERNAL_FORMAT = 'n/j/Y';
     const DATETIME_INTERNAL_FORMAT = 'Y-m-d H:i:s';
-    const DATETIME_INTERNAL_FORMAT_JS = 'yyyy-MM-dd HH:mm:ss';
+    const DATETIME_DISPLAY_FORMAT = 'Y-m-d H:i';
+    const DATETIME_INTERNAL_FORMAT_JS = 'yyyy-MM-dd HH:mm';
 
     public static function tableName()
     {
@@ -150,7 +151,7 @@ class Event extends ActiveRecord
             [
                 ['date_start', 'date_end', 'logistics_date_start', 'logistics_date_end', 'tear_down_date_start', 'tear_down_date_end', 'arrival_date', 'departure_date'],
                 'date',
-                'format' => 'php:' . self::DATETIME_INTERNAL_FORMAT
+                'format' => 'php:' . self::DATETIME_DISPLAY_FORMAT
             ],
             [
                 ['audience'],

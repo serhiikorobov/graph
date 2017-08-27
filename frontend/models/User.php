@@ -45,5 +45,4 @@ class User extends UserBase
 
         return isset($options[$this->role]) ? $options[$this->role] : 'NONE';
     }
-
 }

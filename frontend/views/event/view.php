@@ -32,8 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'short_name',
             'description:ntext',
             'website',
-            'date_start',
-            'date_end',
+            [
+                'attribute' => 'date_start',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+            ],
+            [
+                'attribute' => 'date_end',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+            ],
             'location:ntext',
             'venue_name:ntext',
             'goals:ntext',
@@ -51,13 +57,31 @@ $this->params['breadcrumbs'][] = $this->title;
             'atme:ntext',
             'a_v',
             'stage',
-            'logistics_date_start',
-            'logistics_date_end',
-            'tear_down_date_start',
-            'tear_down_date_end',
+            [
+                'attribute' => 'logistics_date_start',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+            ],
+            [
+                'attribute' => 'logistics_date_end',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+            ],
+            [
+                'attribute' => 'tear_down_date_start',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+            ],
+            [
+                'attribute' => 'tear_down_date_end',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+            ],
             'logistics',
-            'arrival_date',
-            'departure_date',
+            [
+                'attribute' => 'arrival_date',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+            ],
+            [
+                'attribute' => 'departure_date',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+            ],
             'layout_stage:ntext',
             'layout_demo_area:ntext',
             'level_of_support',
@@ -85,6 +109,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'tier',
             'event_quarter',
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'timeZone' => 'Etc/Greenwich'
+        ]
     ]) ?>
 
 </div>

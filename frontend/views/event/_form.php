@@ -88,6 +88,8 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             //$value = $value->format(Event::DATETIME_INTERNAL_FORMAT);
         } elseif ($model->$attribute) {
             $value = $model->$attribute;
+            $value = \DateTime::createFromFormat(Event::DATETIME_INTERNAL_FORMAT, $value);
+            $value = $value->format(Event::DATETIME_DISPLAY_FORMAT);
         }
 
         echo DateTimePicker::widget([
@@ -97,7 +99,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                 'value' => $value,
                 'pluginOptions' => [
                     'format' => Event::DATETIME_INTERNAL_FORMAT_JS,
-                    'startDate' => $startDate ? $startDate->format(Event::DATETIME_INTERNAL_FORMAT) : false,
+                    'startDate' => $startDate ? $startDate->format(Event::DATETIME_DISPLAY_FORMAT) : false,
                     //'todayHighlight' => true,
                     'autoclose'=>true
                 ]

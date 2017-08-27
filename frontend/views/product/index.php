@@ -29,10 +29,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'description:ntext',
-            'date_start',
+            [
+                'attribute' => 'date_start',
+                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'filter' => false
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'timeZone' => 'Etc/Greenwich'
+        ]
     ]); ?>
     <?php Pjax::end(); ?>
 </div>
