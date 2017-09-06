@@ -64,7 +64,7 @@ class Product extends ActiveRecord
         return [
             'name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
-            'date_start' => Yii::t('app', 'Date Start'),
+            'date_start' => Yii::t('app', 'Start Date'),
         ];
     }
 

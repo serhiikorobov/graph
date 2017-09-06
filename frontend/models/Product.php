@@ -43,4 +43,24 @@ class Product extends ProductBase
     {
         return $this->name;
     }
+
+    /**
+     * @param \DateTime|null $from
+     * @param \DateTime|null $to
+     * @return array[Product]
+     */
+    public static function getProducts(\DateTime $from = null, \DateTime $to = null)
+    {
+        $query = static::find();
+
+        if (!is_null($from)) {
+            $query->andWhere(['>=', 'date_start', $from->format(Event::DATETIME_INTERNAL_FORMAT)]);
+        }
+
+        if (!is_null($to)) {
+            $query->andWhere(['<=', 'date_start', $to->format(Event::DATETIME_INTERNAL_FORMAT)]);
+        }
+
+        return $query->all();
+    }
 }

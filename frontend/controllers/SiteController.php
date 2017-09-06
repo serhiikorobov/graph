@@ -108,22 +108,35 @@ class SiteController extends Controller
         switch ($type) {
             case 'product': {
                 if ($eventId) {
-                    $product = Product::findOne(['id' => $eventId]);
-                    if ($product) {
-                        return $this->render('view', [
-                            'model' => $product
-                        ]);
+                    if (!Yii::$app->user->isGuest
+                        && Yii::$app->getUser()->getIdentity()->isManager()
+                    ) {
+                        return $this->redirect(['/product/update', 'id' => $eventId]);
+                    } else {
+                        $product = Product::findOne(['id' => $eventId]);
+                        if ($product) {
+                            return $this->render('view', [
+                                'model' => $product
+                            ]);
+                        }
                     }
                 }
             }
             break;
             default: {
                 if ($eventId) {
-                    $event = Event::findOne(['id' => $eventId]);
-                    if ($event) {
-                        return $this->render('view', [
-                            'model' => $event
-                        ]);
+
+                    if (!Yii::$app->user->isGuest
+                        && Yii::$app->getUser()->getIdentity()->isManager()
+                    ) {
+                        return $this->redirect(['/event/update', 'id' => $eventId]);
+                    } else {
+                        $event = Event::findOne(['id' => $eventId]);
+                        if ($event) {
+                            return $this->render('view', [
+                                'model' => $event
+                            ]);
+                        }
                     }
                 }
             }

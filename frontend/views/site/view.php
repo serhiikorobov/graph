@@ -14,7 +14,6 @@ $audienceSource = new \common\models\event\source\Audience();
 $typeServiceSource = new \common\models\event\source\TypeServices();
 $logisticsSource = new \common\models\event\source\Logistics();
 $levelOfSupport = new \common\models\event\source\LevelOfSupport();
-$submitter = new \common\models\event\source\Submitter();
 $eventType = new \common\models\event\source\EventType();
 $tier = new \common\models\event\source\Tier();
 $objectivesSource = new \common\models\event\source\Objectives();

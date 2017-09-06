@@ -14,10 +14,10 @@ $audienceSource = new \common\models\event\source\Audience();
 $typeServiceSource = new \common\models\event\source\TypeServices();
 $logisticsSource = new \common\models\event\source\Logistics();
 $levelOfSupport = new \common\models\event\source\LevelOfSupport();
-$submitter = new \common\models\event\source\Submitter();
 $eventType = new \common\models\event\source\EventType();
 $tier = new \common\models\event\source\Tier();
 $objectivesSource = new \common\models\event\source\Objectives();
+$onlineReachSource = new \common\models\event\source\OnlineReach();
 
 use kartik\datetime\DateTimePicker;
 
@@ -168,7 +168,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                     <?= $addTooltip($form->field($model, 'requester'))->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'submitter')->dropDownList($submitter->getOptions())  ?>
+                    <?= $form->field($model, 'submitter')->textInput(['maxlength' => true])  ?>
                 </div>
                 <div class="col-md-4">
                     <?= $form->field($model, 'event_type')->dropDownList($eventType->getOptions()) ?>
@@ -221,14 +221,17 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             </div>
 
             <div class="form-group row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <?= $form->field($model, 'group')->textInput(['maxlength' => true]) ?>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <?= $form->field($model, 'number')->textInput(['maxlength' => true]); ?>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <?= $addTooltip($form->field($model, 'objectives'))->dropDownList($objectivesSource->getOptions()); ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'online_reach')->dropDownList($onlineReachSource->getOptions()); ?>
                 </div>
             </div>
 
@@ -281,13 +284,13 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                     <?= $addTooltip($form->field($model, 'stage'))->dropDownList($typeServiceSource->getOptions()) ?>
                 </div>
                 <div class="col-md-3">
-                    <?= $form->field($model, 'catering')->textInput(['maxlength' => true]);  ?>
+                    <?= $form->field($model, 'catering')->dropDownList($yesNoSource->getOptions());  ?>
                 </div>
                 <div class="col-md-3">
-                    <?= $form->field($model, 'network')->textInput(['maxlength' => true]);  ?>
+                    <?= $form->field($model, 'network')->dropDownList($yesNoSource->getOptions());  ?>
                 </div>
                 <div class="col-md-2">
-                    <?= $form->field($model, 'security')->textInput(['maxlength' => true]);  ?>
+                    <?= $form->field($model, 'security')->dropDownList($yesNoSource->getOptions());  ?>
                 </div>
             </div>
 
@@ -374,6 +377,14 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
 
 </div>
 
+
+<?php
+    $userName = null;
+    if (!yii::$app->getUser()->isGuest) {
+        $userName = yii::$app->getUser()->getIdentity()->username;
+    }
+?>
+
 <script>
     document.addEventListener("DOMContentLoaded", function(e) {
         $('#myTabs a').click(function (e) {
@@ -388,6 +399,19 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             $('[data-toggle="popover"]').popover()
         });
 
+        function setSubmitter() {
+            var element = $('#event-submitter');
+            var suffix = '<?php echo trim($userName) ?>';
+            if (suffix) {
+                var value = element.val();
+                var regexp = RegExp(suffix, 'i');
+                if (value && value.search(regexp) === -1) {
+                    value += ' (' + suffix + ')';
+                    element.val(value);
+                }
+            }
+        }
+
         function moveToError() {
             var errorControl = $('.has-error:first');
             var panel = errorControl.parents('.tab-pane:first');
@@ -401,7 +425,22 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
         moveToError();
 
         $('#event_form').on('submit', function (e) {
+            setSubmitter();
             moveToError();
+        });
+
+        $('#event-submitter').on('blur', function () {
+            setSubmitter();
+        });
+        setSubmitter();
+
+
+        $('#event-submitter').on('focus', function () {
+            var element = $(this);
+            var value = element.val();
+            value = value.replace(/(^.+)\(.+$/, '$1');
+            element.val(value.trim());
+            element.select();
         });
     });
 </script>

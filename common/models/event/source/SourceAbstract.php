@@ -19,4 +19,19 @@ abstract class SourceAbstract extends Object
     {
         return array_keys($this->getOptions());
     }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getOptionText($value)
+    {
+        $label = 'NONE';
+        $options = $this->getOptions();
+        if (isset($options[$value])) {
+            $label = $options[$value];
+        }
+
+        return $label;
+    }
 } 

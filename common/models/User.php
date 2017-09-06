@@ -28,6 +28,10 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
 
     const ROLE_SUPER_ADMIN = 10;
+
+    /**
+     * Admin can edit events and products
+     */
     const ROLE_ADMIN = 5;
 
     /**
@@ -211,5 +215,16 @@ class User extends ActiveRecord implements IdentityInterface
             ->andWhere(['role' => \frontend\models\User::ROLE_SUPER_ADMIN])->count();
 
         return (bool)$count;
+    }
+
+    /**
+     * Is manager. Manager can edit events and products
+     *
+     * @return bool
+     */
+    public function isManager()
+    {
+        return $this->role == self::ROLE_ADMIN
+            || $this->role == self::ROLE_SUPER_ADMIN;
     }
 }

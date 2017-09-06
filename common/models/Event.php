@@ -14,7 +14,6 @@ use common\models\event\source\EventType;
 use common\models\event\source\LevelOfSupport;
 use common\models\event\source\Logistics;
 use common\models\event\source\Objectives;
-use common\models\event\source\Submitter;
 use common\models\event\source\Tier;
 use common\models\event\source\TypeServices;
 use common\models\event\source\YesNo;
@@ -74,7 +73,7 @@ use \Yii;
  * @property string $sponsor Sponsor	dropdown: sponsor	yes/no/unknown	(dropdown)
  * @property string $keynote Keynote	dropdown: keynote	yes/no/unknown	(dropdown)
  * @property string $booth Booth Space	dropdown: booth	yes/no/unknown	(dropdown)
- * @property string $sate_lite Satelite Event	dropdown: satelite	yes/no/unknown	(dropdown)
+ * @property string $sate_lite Satellite Event	dropdown: satelite	yes/no/unknown	(dropdown)
  * @property string $meeting Meeting Space	dropdown: meeting	yes/no/unknown	(dropdown)
  * @property string $nda_suite NDA suites	dropdown: NDASuite	yes/no/unknown	(dropdown)
  * @property string $sessions Sessions	dropdown: sessions	yes/no/unknown	(dropdown)
@@ -89,6 +88,7 @@ use \Yii;
  * @property string $catering
  * @property string $network
  * @property string $security
+ * @property string $online_reach
  *
  * @package common\models
  */
@@ -110,11 +110,11 @@ class Event extends ActiveRecord
 
         return [
             [
-                ['short_name', 'tier', 'date_start', 'location'],
+                ['short_name', 'tier', 'date_start', 'location', 'submitter'],
                 'required'
             ],
             [
-                ['short_name', 'website', 'comments', 'event_quarter', 'catering', 'network', 'security'],
+                ['short_name', 'website', 'comments', 'event_quarter'],
                 'string',
                 'max' => 255
             ],
@@ -126,7 +126,8 @@ class Event extends ActiveRecord
             [
                 [
                     'audience', 'nda', 'a_v', 'stage', 'logistics', 'level_of_support', 'submitter', 'event_type',
-                    'sponsor', 'keynote', 'booth', 'sate_lite', 'meeting', 'nda_suite', 'sessions', 'demos', 'training', 'launch', 'pr'
+                    'sponsor', 'keynote', 'booth', 'sate_lite', 'meeting', 'nda_suite', 'sessions', 'demos', 'training', 'launch', 'pr',
+                    'online_reach'
                 ]
                 ,
                 'string',
@@ -174,11 +175,6 @@ class Event extends ActiveRecord
                 'source_model' => LevelOfSupport::className()
             ],
             [
-                ['submitter'],
-                OptionValidator::className(),
-                'source_model' => Submitter::className()
-            ],
-            [
                 ['event_type'],
                 OptionValidator::className(),
                 'source_model' => EventType::className()
@@ -194,7 +190,7 @@ class Event extends ActiveRecord
                 'source_model' => Tier::className()
             ],
             [
-                ['nda', 'sponsor', 'keynote', 'booth', 'sate_lite', 'meeting', 'nda_suite', 'sessions', 'demos', 'training', 'launch', 'pr'],
+                ['nda', 'sponsor', 'keynote', 'booth', 'sate_lite', 'meeting', 'nda_suite', 'sessions', 'demos', 'training', 'launch', 'pr', 'catering', 'network', 'security'],
                 OptionValidator::className(),
                 'source_model' => YesNo::className()
             ],
@@ -212,13 +208,13 @@ class Event extends ActiveRecord
             'short_name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'website' => Yii::t('app', 'Event Website'),
-            'date_start' => Yii::t('app', 'Date Start'),
-            'date_end' => Yii::t('app', 'Date End'),
+            'date_start' => Yii::t('app', 'Start Date'),
+            'date_end' => Yii::t('app', 'End Date'),
             'location' => Yii::t('app', 'Location'),
             'venue_name' => Yii::t('app', 'Venue'),
             'goals' => Yii::t('app', 'Goals'),
             'audience' => Yii::t('app', 'Audiences'),
-            'audience_size' => Yii::t('app', 'Audience size'),
+            'audience_size' => Yii::t('app', 'Audience Size'),
             'products' => Yii::t('app', 'Shared Product(s)'),
             'experiences' => Yii::t('app', 'Shared Experiences'),
             'nda' => Yii::t('app', 'NDA/disclosure'),
@@ -231,15 +227,15 @@ class Event extends ActiveRecord
             'atme' => Yii::t('app', 'Assigned TME'),
             'a_v' => Yii::t('app', 'A/V Services'),
             'stage' => Yii::t('app', 'Stage Services'),
-            'logistics_date_start' => Yii::t('app', 'Setup Date Start'),
-            'logistics_date_end' => Yii::t('app', 'Setup Date End'),
-            'tear_down_date_start' => Yii::t('app', 'Teardown Date Start'),
-            'tear_down_date_end' => Yii::t('app', 'Teardown Date End'),
+            'logistics_date_start' => Yii::t('app', 'Set Up Start Date'),
+            'logistics_date_end' => Yii::t('app', 'Set Up End Date'),
+            'tear_down_date_start' => Yii::t('app', 'Teardown Start Date'),
+            'tear_down_date_end' => Yii::t('app', 'Teardown End Date'),
             'logistics' => Yii::t('app', 'Shipping Logistics'),
-            'arrival_date' => Yii::t('app', 'Equipment Arrive'),
+            'arrival_date' => Yii::t('app', 'Equipment Arrival Date'),
             'departure_date' => Yii::t('app', 'Equipment Departure Date'),
             'layout_stage' => Yii::t('app', 'Stage Layout'),
-            'layout_demo_area' => Yii::t('app', 'Demo layout'),
+            'layout_demo_area' => Yii::t('app', 'Demo Layout'),
             'level_of_support' => Yii::t('app', 'Level of Support'),
             'budget' => Yii::t('app', 'Budget'),
             'cost_center' => Yii::t('app', 'Cost Center'),
@@ -252,7 +248,7 @@ class Event extends ActiveRecord
             'sponsor' => Yii::t('app', 'Sponsor'),
             'keynote' => Yii::t('app', 'Keynote'),
             'booth' => Yii::t('app', 'Booth Space'),
-            'sate_lite' => Yii::t('app', 'Satelite Event'),
+            'sate_lite' => Yii::t('app', 'Satellite Event'),
             'meeting' => Yii::t('app', 'Meeting Space'),
             'nda_suite' => Yii::t('app', 'NDA Suites'),
             'sessions' => Yii::t('app', 'Sessions'),
@@ -267,6 +263,7 @@ class Event extends ActiveRecord
             'catering' => Yii::t('app', 'Catering'),
             'network' => Yii::t('app', 'Network'),
             'security' => Yii::t('app', 'Security'),
+            'online_reach' => Yii::t('app', 'Online Reach')
         ];
     }
 
@@ -276,7 +273,7 @@ class Event extends ActiveRecord
             /*'short_name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'website' => Yii::t('app', 'Event Website'),
-            'date_start' => Yii::t('app', 'Date Start'),
+            'date_start' => Yii::t('app', 'Start Date'),
             'date_end' => Yii::t('app', 'Date End'),
             'location' => Yii::t('app', 'Location'),
             'venue_name' => Yii::t('app', 'Location venue'),*/
@@ -316,7 +313,7 @@ class Event extends ActiveRecord
             /*'sponsor' => Yii::t('app', 'Sponsor'),
             'keynote' => Yii::t('app', 'Keynote'),
             'booth' => Yii::t('app', 'Booth Space'),
-            'sate_lite' => Yii::t('app', 'Satelite Event'),
+            'sate_lite' => Yii::t('app', 'Satellite Event'),
             'meeting' => Yii::t('app', 'Meeting Space'),
             'nda_suite' => Yii::t('app', 'NDA suites'),
             'sessions' => Yii::t('app', 'Sessions'),

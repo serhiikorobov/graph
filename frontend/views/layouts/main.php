@@ -54,10 +54,11 @@ AppAsset::register($this);
         ];
 
         $menuItems[] = [
-            'label' => 'Product launch',
+            'label' => 'Product Launch',
             'url' => ['/product']
         ];
 
+        /* @var $user \common\models\User */
         $user = Yii::$app->getUser()->getIdentity();
         if ($user->role == \frontend\models\User::ROLE_SUPER_ADMIN) {
             $menuItems[] = ['label' => 'Users', 'url' => ['/user/index']];

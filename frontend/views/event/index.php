@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use \yii\helpers\StringHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\event\Search */
@@ -26,8 +27,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'short_name',
-            'description:ntext',
-            'website',
+            //'description:ntext',
+            //'website',
+            [
+                'attribute' => 'tier'
+            ],
+            [
+                'attribute' => 'location',
+                'value' => function(\frontend\models\Event $event) {
+                    return StringHelper::truncate($event->location, 50);
+                }
+            ],
             [
                 'attribute' => 'date_start',
                 'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],

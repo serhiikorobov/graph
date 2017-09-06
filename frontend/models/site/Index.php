@@ -78,9 +78,9 @@ class Index extends Model
             $controller = \Yii::$app->controller;
 
             if ($tier == 0) {
-                $url = Url::to(['site/view/', 'id' => $venue->getPrimaryKey(), 'type' => 'product']);
+                $url = Url::to(['site/view', 'id' => $venue->getPrimaryKey(), 'type' => 'product']);
             } else {
-                $url = Url::to(['site/view?id=' . $venue->getPrimaryKey()]);
+                $url = Url::to(['site/view', 'id' => $venue->getPrimaryKey()]);
             }
 
             $data[] = array(
@@ -147,7 +147,7 @@ class Index extends Model
             }
 
             $venues = Event::getVenues($tiers, $date, $dateTo);
-            $venues = array_merge($venues, Product::find()->all());
+            $venues = array_merge($venues, Product::getProducts($date, $dateTo));
 
             $this->_venues = $venues;
         }
