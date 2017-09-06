@@ -21,6 +21,9 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <?php
+    $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js', array('depends' => ['yii\web\YiiAsset']));
+    ?>
 </head>
 <body>
 <?php $this->beginBody() ?>

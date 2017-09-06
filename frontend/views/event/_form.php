@@ -89,7 +89,9 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
         } elseif ($model->$attribute) {
             $value = $model->$attribute;
             $value = \DateTime::createFromFormat(Event::DATETIME_INTERNAL_FORMAT, $value);
-            $value = $value->format(Event::DATETIME_DISPLAY_FORMAT);
+            if ($value) {
+                $value = $value->format(Event::DATETIME_DISPLAY_FORMAT);
+            }
         }
 
         echo DateTimePicker::widget([
@@ -383,6 +385,8 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
     if (!yii::$app->getUser()->isGuest) {
         $userName = yii::$app->getUser()->getIdentity()->username;
     }
+
+    $isNewEvent = $model->getIsNewRecord();
 ?>
 
 <script>
@@ -399,17 +403,35 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             $('[data-toggle="popover"]').popover()
         });
 
-        function setSubmitter() {
+        function setSubmitter(submitter, userName) {
             var element = $('#event-submitter');
-            var suffix = '<?php echo trim($userName) ?>';
+            var suffix = userName ? userName : '<?php echo trim($userName) ?>';
             if (suffix) {
-                var value = element.val();
+                var value = submitter ? submitter : element.val();
                 var regexp = RegExp(suffix, 'i');
                 if (value && value.search(regexp) === -1) {
                     value += ' (' + suffix + ')';
                     element.val(value);
                 }
             }
+        }
+        
+        function updateSubmitterCookie(submitter) {
+            var current;
+            if (submitter) {
+                current = submitter.trim();
+            } else {
+                var element = $('#event-submitter');
+                current = element.val();
+            }
+
+            var orig = $.cookie('username');
+            if (orig != current) {
+                $.cookie('username', current, { expires: 180, path: '/' });
+                return true;
+            }
+
+            return false;
         }
 
         function moveToError() {
@@ -424,24 +446,57 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
 
         moveToError();
 
-        $('#event_form').on('submit', function (e) {
-            setSubmitter();
-            moveToError();
+        function blurSubmitter() {
+            var element = $('#event-submitter');
+            var value = element.val().trim();
+            if (value) {
+                if (value != oldSubmitter) {
+                    updateSubmitterCookie();
+                    setSubmitter();
+                } else {
+                    setSubmitter(null, oldUsername)
+                }
+            }
+        }
+
+        $('#event_form').on('afterValidate', function (a, b, c) {
+            var hasError = false;
+            for (var prop in b) {
+                if (b.hasOwnProperty(prop)) {
+                    hasError = b[prop].length > 0;
+                    if (hasError) {
+                        break;
+                    }
+                }
+            }
+
+            if (hasError) {
+                moveToError();
+            } else {
+                //blurSubmitter();
+            }
         });
 
-        $('#event-submitter').on('blur', function () {
-            setSubmitter();
-        });
-        setSubmitter();
-
-
+        var oldUsername;
+        var oldSubmitter;
         $('#event-submitter').on('focus', function () {
             var element = $(this);
-            var value = element.val();
-            value = value.replace(/(^.+)\(.+$/, '$1');
+            var value = element.val().trim();
+            oldUsername = value.replace(/(^.+)\((.+)\)$/, '$2').trim();
+            value = oldSubmitter = element.val().replace(/(^.+)\(.+$/, '$1').trim();
             element.val(value.trim());
             element.select();
         });
+
+        $('#event_form').on('afterValidateAttribute', function (a, b, c) {
+            if (b.id == 'event-submitter') {
+                blurSubmitter();
+            }
+        });
+
+        <?php if ($isNewEvent): ?>
+        setSubmitter($.cookie('username'));
+        <?php endif; ?>
     });
 </script>
 
