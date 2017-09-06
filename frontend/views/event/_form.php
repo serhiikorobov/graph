@@ -449,7 +449,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
         function blurSubmitter() {
             var element = $('#event-submitter');
             var value = element.val().trim();
-            if (value) {
+            if (value && oldSubmitter !== undefined) {
                 if (value != oldSubmitter) {
                     updateSubmitterCookie();
                     setSubmitter();
