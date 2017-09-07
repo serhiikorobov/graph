@@ -95,17 +95,17 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
         }
 
         echo DateTimePicker::widget([
-                'name' => $model->formName() . '[' . $attribute . ']',
-                'options' => $options,
-                'convertFormat' => true,
-                'value' => $value,
-                'pluginOptions' => [
-                    'format' => Event::DATETIME_INTERNAL_FORMAT_JS,
-                    'startDate' => $startDate ? $startDate->format(Event::DATETIME_DISPLAY_FORMAT) : false,
-                    //'todayHighlight' => true,
-                    'autoclose'=>true
-                ]
-            ]);
+            'name' => $model->formName() . '[' . $attribute . ']',
+            'options' => $options,
+            'convertFormat' => true,
+            'value' => $value,
+            'pluginOptions' => [
+                'format' => Event::DATETIME_INTERNAL_FORMAT_JS,
+                'startDate' => $startDate ? $startDate->format(Event::DATETIME_DISPLAY_FORMAT) : false,
+                //'todayHighlight' => true,
+                'autoclose'=>true
+            ]
+        ]);
 
         echo Html::error($model, $attribute, array('class' => 'help-block'));
 
@@ -341,11 +341,11 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                 </div>
                 <div class="col-md-4">
                     <?= $addTooltip($form->field($model, 'budget', [
-                            'template' => "{label}\n<div class='input-group'><span class='input-group-addon'>$</span>{input}</div>\n{hint}\n{error}",
-                        ]))->textInput([
-                            'maxlength' => true,
-                            //'placeholder' => '00.00'
-                        ]) ?>
+                        'template' => "{label}\n<div class='input-group'><span class='input-group-addon'>$</span>{input}</div>\n{hint}\n{error}",
+                    ]))->textInput([
+                        'maxlength' => true,
+                        //'placeholder' => '00.00'
+                    ]) ?>
                 </div>
                 <div class="col-md-4">
                     <?= $addTooltip($form->field($model, 'cost_center'))->textInput(['maxlength' => true]) ?>
@@ -381,12 +381,12 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
 
 
 <?php
-    $userName = null;
-    if (!yii::$app->getUser()->isGuest) {
-        $userName = yii::$app->getUser()->getIdentity()->username;
-    }
+$userName = null;
+if (!yii::$app->getUser()->isGuest) {
+    $userName = yii::$app->getUser()->getIdentity()->username;
+}
 
-    $isNewEvent = $model->getIsNewRecord();
+$isNewEvent = $model->getIsNewRecord();
 ?>
 
 <script>
@@ -415,7 +415,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                 }
             }
         }
-        
+
         function updateSubmitterCookie(submitter) {
             var current;
             if (submitter) {
@@ -448,7 +448,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
 
         function blurSubmitter() {
             var element = $('#event-submitter');
-            var value = element.val().replace(/(^.+)\(.+$/, '$1').trim();
+            var value = element.val().replace(/\(.+\)/g, '').trim();
             if (value && oldSubmitter !== undefined) {
                 if (value != oldSubmitter) {
                     updateSubmitterCookie();
@@ -456,6 +456,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                 } else {
                     setSubmitter(null, oldUsername)
                 }
+                oldSubmitter = undefined;
             }
         }
 
@@ -481,8 +482,8 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             var element = $(this);
             var value = element.val().trim();
             oldUsername = value.replace(/(^.+)\((.+)\)$/, '$2').trim();
-            value = oldSubmitter = element.val().replace(/(^.+)\(.+$/, '$1').trim();
-            element.val(value.trim());
+            value = oldSubmitter = element.val().replace(/\(.+\)/g, '').trim();
+            element.val(value);
             element.select();
         });
 
@@ -495,6 +496,7 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
         <?php if ($isNewEvent): ?>
         setSubmitter($.cookie('username'));
         <?php endif; ?>
+
     });
 </script>
 
