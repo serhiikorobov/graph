@@ -268,11 +268,15 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             </div>
 
             <div class="form-group row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <?= $form->field($model, 'launch')->dropDownList($yesNoSource->getOptions()) ?>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <?= $form->field($model, 'pr')->dropDownList($yesNoSource->getOptions()) ?>
+                </div>
+
+                <div class="col-md-4">
+                    <?= $form->field($model, 'sponsor')->dropDownList($yesNoSource->getOptions()); ?>
                 </div>
             </div>
         </div>
@@ -366,7 +370,6 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             </div>
         </div>
         <div role="tabpanel" class="tab-pane" id="comments">
-            <?= $form->field($model, 'sponsor')->dropDownList($yesNoSource->getOptions()); ?>
             <?= $addTooltip($form->field($model, 'comments'))->textarea(['rows' => 6]) ?>
         </div>
     </div>
