@@ -27,13 +27,16 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
 
         <form class="form-horizontal" action="/" id="filters">
             <div class="form-group">
-                <label for="filter_tier" class="col-sm-2 control-label">Event infos filter</label>
+                <label for="filter_tier" class="col-sm-2 control-label">Event info filter</label>
                 <div class="col-sm-3">
                     <select multiple name="filter_tier[]" id="filter_tier" class="form-control">
                         <?php foreach ($model->getTierOptions() as $option): ?>
                             <option value="<?php echo $option['value'] ?>" <?php echo isset($option['selected']) ? 'selected="selected"' : '' ?>><?php echo $option['label'] ?></option>
                         <?php endforeach; ?>
                     </select>
+                </div>
+                <div class="col-sm-3">
+                    Tier level is based on levels of Impact/Involvement/Production cost. Tier 1 being highest, and 5 being lowest
                 </div>
             </div>
 
@@ -165,9 +168,14 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
                 if (venueType == 'internal') {
                     var data = this.getMeta().data;
                     for(var i = 0; i < data.length; i++) {
+
                         var element = data[i];
                         var color = element._view.backgroundColor;
                         var point = element.getCenterPoint();
+                        var useDash = obj.lineStyle == '<?php echo $model::DOTTED_LINE ?>'
+                        if (useDash) {
+                            this.chart.chart.ctx.setLineDash([8, 5]);
+                        }
                         this.chart.chart.ctx.beginPath();
                         this.chart.chart.ctx.moveTo(point.x, 0);
                         this.chart.chart.ctx.lineTo(point.x, this.chart.chart.height - 30);
@@ -175,6 +183,9 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
                         this.chart.chart.ctx.strokeStyle = color;
 
                         this.chart.chart.ctx.stroke();
+                        if (useDash) {
+                            this.chart.chart.ctx.setLineDash([0, 0]);
+                        }
                     }
                 }
             }
@@ -286,7 +297,7 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
                             max: <?php echo $model->maxTier + 1; ?>,
                             callback: function(value, index, values) {
                                if (value >= 0 && Number(value) === value && value % 1 === 0) {
-                                   var label = 'External Tier ' + value + ' Events';
+                                   var label = 'Tier ' + value + ' Events';
                                    if (value == 0) {
                                        label = 'Product Launch';
                                    }

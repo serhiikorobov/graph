@@ -11,7 +11,7 @@ namespace common\models\event\source;
 
 class Logistics extends SourceAbstract
 {
-    public function getOptions()
+    public function getOptions($withDefault = true)
     {
         $options = [
             '' => '',

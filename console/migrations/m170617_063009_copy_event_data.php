@@ -15,8 +15,10 @@ class m170617_063009_copy_event_data extends \console\models\Migration
 
             $event->short_name = $venue->event_name;
             $event->tier = $venue->getGlobalTier();
-            $event->date_start = $venue->getStartDate()->format(Event::DATETIME_INTERNAL_FORMAT);
+            $event->date_start = $venue->getStartDate()->format(Event::DATETIME_DISPLAY_FORMAT);
             $event->date_end = $event->date_start;
+            $event->submitter = 'none';
+            $event->location = 'none';
 
             if (!$event->save()) {
                 $errors = $event->getErrors();

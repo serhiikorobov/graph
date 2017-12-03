@@ -11,10 +11,14 @@ namespace common\models\event\source;
 
 class Objectives extends SourceAbstract
 {
-    public function getOptions()
+    public function getOptions($withDefault = true)
     {
+        $options = [];
+        if ($withDefault) {
+            $options[''] = '';
+        }
+
         $options = [
-            '' => '',
             'ai' => \Yii::t('app', 'AI'),
             'ad' => \Yii::t('app', 'AD'),
             'vr' => \Yii::t('app', 'VR'),

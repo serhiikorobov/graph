@@ -224,7 +224,12 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function isManager()
     {
-        return $this->role == self::ROLE_ADMIN
-            || $this->role == self::ROLE_SUPER_ADMIN;
+        return $this->role === self::ROLE_ADMIN
+            || $this->isAdmin();
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === self::ROLE_SUPER_ADMIN;
     }
 }

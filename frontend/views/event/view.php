@@ -6,11 +6,14 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Event */
 
+$objectiveSource = new \common\models\event\source\Objectives();
 $onlineReachSource = new \common\models\event\source\OnlineReach();
 
-$this->title = $model->id;
+$this->title = $model->short_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Events'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="event-view">
 
@@ -94,7 +97,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'group:ntext',
             'event_type',
             'number',
-            'objectives',
+            [
+                'attribute' => 'objectives',
+                'value' => function(\frontend\models\Event $row) use ($objectiveSource) {
+                    $values = $row->objectives;
+                    $labels = [];
+                    if ($values) {
+                        foreach ($values as $value) {
+                            $labels[] = $objectiveSource->getOptionText($value);
+                        }
+                    }
+
+                    return implode(', ', $labels);
+                }
+            ],
             [
                 'attribute' => 'online_reach',
                 'value' => function(\frontend\models\Event $row) use ($onlineReachSource) {

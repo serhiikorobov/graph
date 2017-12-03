@@ -12,7 +12,10 @@ class m170824_110512_add_field_to_event_table extends \console\models\Migration
 
     public function safeDown()
     {
-
+        $tableName = \common\models\Event::tableName();
+        $this->dropColumn($tableName, 'catering');
+        $this->dropColumn($tableName, 'network');
+        $this->dropColumn($tableName, 'security');
     }
 
     /*

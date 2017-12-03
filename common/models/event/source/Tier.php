@@ -11,7 +11,7 @@ namespace common\models\event\source;
 
 class Tier extends SourceAbstract
 {
-    public function getOptions()
+    public function getOptions($withDefault = true)
     {
         $options = [
             '' => '',

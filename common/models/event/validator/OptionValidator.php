@@ -28,7 +28,12 @@ class OptionValidator extends Validator
     protected function validateValue($value)
     {
         /* @var $source SourceAbstract */
-        $source = new $this->source_model;
+        if (is_callable($this->source_model)) {
+            $source = call_user_func($this->source_model);
+        } else {
+            $source = new $this->source_model;
+        }
+
         if (!in_array($value, $source->getValues())) {
             return [$this->message, []];
         }

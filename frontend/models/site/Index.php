@@ -8,7 +8,7 @@
 
 namespace frontend\models\site;
 
-
+use common\models\product\source\Breakdown;
 use frontend\models\Event;
 use frontend\models\Product;
 use yii\base\Model;
@@ -25,6 +25,9 @@ class Index extends Model
     public $filter_tier;
     public $filter_date;
     public $filter_month;
+
+    const DOTTED_LINE = 'DOTTED_LINE';
+    const LINE = 'LINE';
 
     public function __construct($config = [])
     {
@@ -83,6 +86,13 @@ class Index extends Model
                 $url = Url::to(['site/view', 'id' => $venue->getPrimaryKey()]);
             }
 
+            $lineStyle = self::LINE;
+            if ($tier === 0 &&
+                $venue->breakdown === Breakdown::ANNOUNCEMENT
+            ) {
+                $lineStyle = self::DOTTED_LINE ;
+            }
+
             $data[] = array(
                 'url' => $url,
                 'label' => $venue->event_name,
@@ -93,6 +103,7 @@ class Index extends Model
                     'r' => 4,
                     //'venueType' => $venue->scenario,
                     'venueType' => $tier > 0 ? 'external' : 'internal',
+                    'lineStyle' =>  $lineStyle
                 )),
                 'backgroundColor' => $color,
                 'hoverBackgroundColor' => $color

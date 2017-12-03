@@ -9,6 +9,7 @@
 namespace common\models;
 
 
+use common\models\event\source\Assigned;
 use common\models\event\source\Audience;
 use common\models\event\source\EventType;
 use common\models\event\source\LevelOfSupport;
@@ -24,67 +25,65 @@ use \Yii;
 /**
  * Class Event
  *
- * @property $short_name Name	textbox: shortname		(text)
- * @property $description	textbox: description		(text)
- * @property $website	textbox: website
- * @property $date_start pick: date start-end		(date)
+ * @property $short_name Name    textbox: shortname        (text)
+ * @property $description    textbox: description        (text)
+ * @property $website    textbox: website
+ * @property $date_start pick: date start-end        (date)
  * @property $date_end
- * @property $location	textbox: location (guided)	(City, State, Country)	(text)
- * @property $venue_name	textbox: Venuename		(text)
+ * @property $location    textbox: location (guided)    (City, State, Country)    (text)
+ * @property $venue_name    textbox: Venuename        (text)
  *
- * @property string $goals What are the goals and objectives for the meeting/speakership?	textbox: goals		(text)
- * @property string $audience Will the demo be shown to internal Intel or external audiences? 	dropdown: audience	Internal, external, mix, unknown	(dropdown)
- * @property int $audience_size Expected Audience size textbox: audiencesize		(numeric)
- * @property string $products Which product(s) will be shared? 	textbox: products		(text)
- * @property string $experiences Which experiences will be shared? 	textbox: experiences		(text)
- * @property string $nda Are there any NDA/disclosure requirements?	dropdown: nda	yes/no/unknown	(dropdown)
- * @property string $audience_persons  Who is the intended audience of this meeting/speakership?	textbox: audience		(text)
- * @property string $expectations What is the audience’s expectation?	textbox: expectations		(text)
- * @property string $customers Are any specific customers involved, expected to be featured?	textbox: partners		(text)
- * @property string $partners Are any specific partners involved, expected to be featured?	textbox: customers		(text)
- * @property string $comments Additional questions to consider:	textbox: comments		(text)
- * @property string $apm Assigned PM	textbox: APM		(text)
- * @property string $atme Assigned TME	textbox: ATME		(text)
-
+ * @property string $goals What are the goals and objectives for the meeting/speakership?    textbox: goals        (text)
+ * @property string $audience Will the demo be shown to internal Intel or external audiences?    dropdown: audience    Internal, external, mix, unknown    (dropdown)
+ * @property int $audience_size Expected Audience size textbox: audiencesize        (numeric)
+ * @property string $products Which product(s) will be shared?    textbox: products        (text)
+ * @property string $experiences Which experiences will be shared?    textbox: experiences        (text)
+ * @property string $nda Are there any NDA/disclosure requirements?    dropdown: nda    yes/no/unknown    (dropdown)
+ * @property string $audience_persons  Who is the intended audience of this meeting/speakership?    textbox: audience        (text)
+ * @property string $expectations What is the audience’s expectation?    textbox: expectations        (text)
+ * @property string $customers Are any specific customers involved, expected to be featured?    textbox: partners        (text)
+ * @property string $partners Are any specific partners involved, expected to be featured?    textbox: customers        (text)
+ * @property string $comments Additional questions to consider:    textbox: comments        (text)
+ * @property string $apm Assigned PM    textbox: APM        (text)
+ * @property string $atme Assigned TME    textbox: ATME        (text)
  *
- * @property string $a_v A/V services	dropdown: A/V	Self/CCG/External/Unknown	(dropdown)
- * @property string $stage Stage services	dropdown: Stage	Self/CCG/External/Unknown	(dropdown)
- * @property string $logistics_date_start Setup date	pick: date start		(date)
- * @property string $logistics_time_start Setup time	textbox: time start-end		(numeric)
+ * @property string $a_v A/V services    dropdown: A/V    Self/CCG/External/Unknown    (dropdown)
+ * @property string $stage Stage services    dropdown: Stage    Self/CCG/External/Unknown    (dropdown)
+ * @property string $logistics_date_start Setup date    pick: date start        (date)
+ * @property string $logistics_time_start Setup time    textbox: time start-end        (numeric)
  * @property string $logistics_time_end
- * @property string $tear_down_date Teardown date	pick: date end		(date)
- * @property string $tear_down_time_start Teardown time	textbox: time start-end		(numeric)
+ * @property string $tear_down_date Teardown date    pick: date end        (date)
+ * @property string $tear_down_time_start Teardown time    textbox: time start-end        (numeric)
  * @property string $tear_down_time_end Teardown
- * @property string $logistics Who is handling shipping logistics	dropdown: logistics, if other list	Intel/S&M United/Sho-Air/self/other	(dropdown)
- * @property string $arrival_date When can equipment arrive at the designated location?	pick: arrival date		(date)
- * @property string $departure_date When does equipment need to be removed from location?	pick: departure date		(date)
- * @property string $layout_stage What is the layout of the stage area?	textbox: layout stage		(text)
- * @property string $layout_demo_area What is the layout of the demo area?	textbox: layout demo area		(text)
- * @property string $level_of_support Will there be local/additional support provided or do we need to provide all the demo support?	dropdown: level of support, if other list	Local/CCG/Corp Demos/Mixed/All	(dropdown)
- * @property double $budget Budget	textbox: budget		(numeric,$)
- * @property double $cost_center Cost center	textbox: cost center		(numeric)
-
- * @property string $requester Name of the requester	Textbox: requester		(text)
- * @property string $submitter Submitted by	dropdown: submitter	Becky/April/Kim/Nicole/Jeff/Chris/Ali/Art/Yuri	(dropdown)
- * @property string $group Group Submission	textbox: group	(text)	(text)
- * @property string $event_type Event Type	dropdown: event type	Consumer/Industry/Sales/Other	(dropdown)
- * @property string $number	Intel Attendees	textbox: number		(numeric)
- * @property string objectives "Business Objective (BK's Top 4 Jobs)"	checkbox: objectives	AI/AD/VR/SmartConnected Home	(checkbox)
- * @property string $sponsor Sponsor	dropdown: sponsor	yes/no/unknown	(dropdown)
- * @property string $keynote Keynote	dropdown: keynote	yes/no/unknown	(dropdown)
- * @property string $booth Booth Space	dropdown: booth	yes/no/unknown	(dropdown)
- * @property string $sate_lite Satellite Event	dropdown: satelite	yes/no/unknown	(dropdown)
- * @property string $meeting Meeting Space	dropdown: meeting	yes/no/unknown	(dropdown)
- * @property string $nda_suite NDA suites	dropdown: NDASuite	yes/no/unknown	(dropdown)
- * @property string $sessions Sessions	dropdown: sessions	yes/no/unknown	(dropdown)
- * @property string $demos Demos dropdown: demos	yes/no/unknown	(dropdown)
- * @property string $training Training	dropdown: training	yes/no/unknown	(dropdown)
- * @property string $launch Product Launch	dropdown: launch	yes/no/unknown	(dropdown)
- * @property string $pr PR Activation	dropdown: PR	yes/no/unknown	(dropdown)
- * @property double $costs My Costs	textbox: costs	$	(numeric,$)
- * @property double $shipping_costs Shipping Costs	textbox: shipping costs	$	(numeric,$)
- * @property string $tier Tier	dropdown: tier	1/2/3/4/5/unknown	(dropdown)
- * @property string $event_quarter Event Quarter	(autocalculate)
+ * @property string $logistics Who is handling shipping logistics    dropdown: logistics, if other list    Intel/S&M United/Sho-Air/self/other    (dropdown)
+ * @property string $arrival_date When can equipment arrive at the designated location?    pick: arrival date        (date)
+ * @property string $departure_date When does equipment need to be removed from location?    pick: departure date        (date)
+ * @property string $layout_stage What is the layout of the stage area?    textbox: layout stage        (text)
+ * @property string $layout_demo_area What is the layout of the demo area?    textbox: layout demo area        (text)
+ * @property string $level_of_support Will there be local/additional support provided or do we need to provide all the demo support?    dropdown: level of support, if other list    Local/CCG/Corp Demos/Mixed/All    (dropdown)
+ * @property double $budget Budget    textbox: budget        (numeric,$)
+ * @property double $cost_center Cost center    textbox: cost center        (numeric)
+ * @property string $requester Name of the requester    Textbox: requester        (text)
+ * @property string $submitter Submitted by    dropdown: submitter    Becky/April/Kim/Nicole/Jeff/Chris/Ali/Art/Yuri    (dropdown)
+ * @property string $group Group Submission    textbox: group    (text)    (text)
+ * @property string $event_type Event Type    dropdown: event type    Consumer/Industry/Sales/Other    (dropdown)
+ * @property string $number    Intel Attendees    textbox: number        (numeric)
+ * @property string objectives "Business Objective (BK's Top 4 Jobs)"    checkbox: objectives    AI/AD/VR/SmartConnected Home    (checkbox)
+ * @property string $sponsor Sponsor    dropdown: sponsor    yes/no/unknown    (dropdown)
+ * @property string $keynote Keynote    dropdown: keynote    yes/no/unknown    (dropdown)
+ * @property string $booth Booth Space    dropdown: booth    yes/no/unknown    (dropdown)
+ * @property string $sate_lite Satellite Event    dropdown: satelite    yes/no/unknown    (dropdown)
+ * @property string $meeting Meeting Space    dropdown: meeting    yes/no/unknown    (dropdown)
+ * @property string $nda_suite NDA suites    dropdown: NDASuite    yes/no/unknown    (dropdown)
+ * @property string $sessions Sessions    dropdown: sessions    yes/no/unknown    (dropdown)
+ * @property string $demos Demos dropdown: demos    yes/no/unknown    (dropdown)
+ * @property string $training Training    dropdown: training    yes/no/unknown    (dropdown)
+ * @property string $launch Product Launch    dropdown: launch    yes/no/unknown    (dropdown)
+ * @property string $pr PR Activation    dropdown: PR    yes/no/unknown    (dropdown)
+ * @property double $costs My Costs    textbox: costs    $    (numeric,$)
+ * @property double $shipping_costs Shipping Costs    textbox: shipping costs    $    (numeric,$)
+ * @property string $tier Tier    dropdown: tier    1/2/3/4/5/unknown    (dropdown)
+ * @property string $event_quarter Event Quarter    (autocalculate)
  * @property string $catering
  * @property string $network
  * @property string $security
@@ -108,7 +107,7 @@ class Event extends ActiveRecord
     {
         $allFields = array_keys($this->attributeLabels());
 
-        return [
+        $rules = [
             [
                 ['short_name', 'tier', 'date_start', 'location', 'submitter'],
                 'required'
@@ -119,15 +118,26 @@ class Event extends ActiveRecord
                 'max' => 255
             ],
             [
-                ['objectives'],
-                'string',
-                'max' => 100
-            ],
-            [
                 [
-                    'audience', 'nda', 'a_v', 'stage', 'logistics', 'level_of_support', 'submitter', 'event_type',
-                    'sponsor', 'keynote', 'booth', 'sate_lite', 'meeting', 'nda_suite', 'sessions', 'demos', 'training', 'launch', 'pr',
-                    'online_reach'
+                    'audience',
+                    'nda',
+                    'a_v',
+                    'stage',
+                    'logistics',
+                    'level_of_support',
+                    'submitter',
+                    'event_type',
+                    'sponsor',
+                    'keynote',
+                    'booth',
+                    'sate_lite',
+                    'meeting',
+                    'nda_suite',
+                    'sessions',
+                    'demos',
+                    'training',
+                    'launch',
+                    'pr'
                 ]
                 ,
                 'string',
@@ -135,8 +145,21 @@ class Event extends ActiveRecord
             ],
             [
                 [
-                    'description', 'location', 'venue_name', 'goals', 'products', 'experiences', 'audience_persons', 'expectations', 'customers',
-                    'partners', 'comments', 'apm', 'atme', 'layout_stage', 'layout_demo_area', 'requester', 'group'
+                    'description',
+                    'location',
+                    'venue_name',
+                    'goals',
+                    'products',
+                    'experiences',
+                    'audience_persons',
+                    'expectations',
+                    'customers',
+                    'partners',
+                    'comments',
+                    'layout_stage',
+                    'layout_demo_area',
+                    'requester',
+                    'group'
                 ],
                 'string'
             ],
@@ -150,7 +173,16 @@ class Event extends ActiveRecord
                 'integerOnly' => false
             ],
             [
-                ['date_start', 'date_end', 'logistics_date_start', 'logistics_date_end', 'tear_down_date_start', 'tear_down_date_end', 'arrival_date', 'departure_date'],
+                [
+                    'date_start',
+                    'date_end',
+                    'logistics_date_start',
+                    'logistics_date_end',
+                    'tear_down_date_start',
+                    'tear_down_date_end',
+                    'arrival_date',
+                    'departure_date'
+                ],
                 'date',
                 'format' => 'php:' . self::DATETIME_DISPLAY_FORMAT
             ],
@@ -181,8 +213,11 @@ class Event extends ActiveRecord
             ],
             [
                 ['objectives'],
-                OptionValidator::className(),
-                'source_model' => Objectives::className()
+                'each',
+                'rule' => [
+                    OptionValidator::className(),
+                    'source_model' => Objectives::className()
+                ]
             ],
             [
                 ['tier'],
@@ -190,7 +225,20 @@ class Event extends ActiveRecord
                 'source_model' => Tier::className()
             ],
             [
-                ['nda', 'sponsor', 'keynote', 'booth', 'sate_lite', 'meeting', 'nda_suite', 'sessions', 'demos', 'training', 'launch', 'pr', 'catering', 'network', 'security'],
+                [
+                    'nda',
+                    'sponsor',
+                    'keynote',
+                    'booth',
+                    'sate_lite',
+                    'meeting',
+                    'nda_suite',
+                    'sessions',
+                    'demos',
+                    'training',
+                    'launch',
+                    'pr'
+                ],
                 OptionValidator::className(),
                 'source_model' => YesNo::className()
             ],
@@ -200,11 +248,64 @@ class Event extends ActiveRecord
                 'value' => null
             ]
         ];
+
+        if ($this->_onlineReachFieldInstalled()) {
+            $rules[] = [
+                [
+                    'online_reach'
+                ]
+                ,
+                'string',
+                'max' => 50
+            ];
+        }
+
+        if ($this->_cateringFieldInstalled()) {
+            $rules[] = [
+                ['catering'],
+                OptionValidator::className(),
+                'source_model' => YesNo::className()
+            ];
+        }
+
+        if ($this->_networkFieldInstalled()) {
+            $rules[] = [
+                ['network'],
+                OptionValidator::className(),
+                'source_model' => YesNo::className()
+            ];
+        }
+
+        if ($this->_securityFieldInstalled()) {
+            $rules[] = [
+                ['security'],
+                OptionValidator::className(),
+                'source_model' => YesNo::className()
+            ];
+        }
+
+        if ($this->_roleFieldsInstalled()) {
+            $roleFields = self::getRoleFields();
+            foreach ($roleFields as $roleField) {
+                $rules[] = [
+                    $roleField,
+                    OptionValidator::className(),
+                    'source_model' => function () use ($roleField) {
+                        $code = ltrim($roleField, 'a');
+                        Assigned::$role = strtoupper($code);
+
+                        return new Assigned();
+                    }
+                ];
+            }
+        }
+
+        return $rules;
     }
 
     public function attributeLabels()
     {
-        return [
+        $labels = [
             'short_name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'website' => Yii::t('app', 'Event Website'),
@@ -260,11 +361,37 @@ class Event extends ActiveRecord
             'shipping_costs' => Yii::t('app', 'Shipping Costs'),
             'tier' => Yii::t('app', 'Tier'),
             'event_quarter' => Yii::t('app', 'Event Quarter'),
-            'catering' => Yii::t('app', 'Catering'),
-            'network' => Yii::t('app', 'Network'),
-            'security' => Yii::t('app', 'Security'),
-            'online_reach' => Yii::t('app', 'Online Reach')
+
         ];
+
+        if ($this->_onlineReachFieldInstalled()) {
+            $labels['online_reach'] = Yii::t('app', 'Online Reach');
+        }
+
+        if ($this->_cateringFieldInstalled()) {
+            $labels['catering'] = Yii::t('app', 'Catering');
+        }
+
+        if ($this->_networkFieldInstalled()) {
+            $labels['network'] = Yii::t('app', 'Network');
+        }
+
+        if ($this->_securityFieldInstalled()) {
+            $labels['security'] = Yii::t('app', 'Security');
+        }
+
+        if ($this->_roleFieldsInstalled()) {
+            $labels += [
+                'acontent' => Yii::t('app', 'Assigned Content'),
+                'axpm' => Yii::t('app', 'Assigned XPM'),
+                'apr' => Yii::t('app', 'Assigned PR'),
+                'apresentations' => Yii::t('app', 'Assigned Presentations'),
+                'agraphics' => Yii::t('app', 'Assigned Graphics'),
+                'awebcast' => Yii::t('app', 'Assigned Webcast')
+            ];
+        }
+
+        return $labels;
     }
 
     public function attributeTooltip()
@@ -291,7 +418,8 @@ class Event extends ActiveRecord
             /*'apm' => Yii::t('app', 'Assigned PM'),
             'atme' => Yii::t('app', 'Assigned TME'),*/
             'a_v' => Yii::t('app', 'Depending on scope of event/meeting/speakership- who is providing A/V services'),
-            'stage' => Yii::t('app', 'Depending on scope of event/meeting/speakership- who is providing  stage services'),
+            'stage' => Yii::t('app',
+                'Depending on scope of event/meeting/speakership- who is providing  stage services'),
             /*'logistics_date_start' => Yii::t('app', 'Setup date start'),
             'logistics_date_end' => Yii::t('app', 'Setup date end'),
             'tear_down_date_start' => Yii::t('app', 'Teardown date start'),
@@ -301,7 +429,8 @@ class Event extends ActiveRecord
             'departure_date' => Yii::t('app', 'When does equipment need to be removed from location?'),
             'layout_stage' => Yii::t('app', 'What is the layout of the stage area?'),
             'layout_demo_area' => Yii::t('app', 'What is the layout of the demo area?'),
-            'level_of_support' => Yii::t('app', 'Will there be local/additional support provided or do we need to provide all the demo support?'),
+            'level_of_support' => Yii::t('app',
+                'Will there be local/additional support provided or do we need to provide all the demo support?'),
             'budget' => Yii::t('app', 'What is the budget for the meeting/speakership?'),
             'cost_center' => Yii::t('app', 'What\'s Cost center for the meeting/speakership?'),
             'requester' => Yii::t('app', 'Name of the requester'),
@@ -363,5 +492,101 @@ class Event extends ActiveRecord
         $tiers = $query->createCommand()->queryColumn();
 
         return $tiers;
+    }
+
+    protected function _onlineReachFieldInstalled()
+    {
+        $tableSchema = static::getDb()
+            ->schema
+            ->getTableSchema(static::tableName());
+
+        return isset ($tableSchema->columns['online_reach']);
+    }
+
+    protected function _cateringFieldInstalled()
+    {
+        $tableSchema = static::getDb()
+            ->schema
+            ->getTableSchema(static::tableName());
+
+        return isset ($tableSchema->columns['catering']);
+    }
+
+    protected function _networkFieldInstalled()
+    {
+        $tableSchema = static::getDb()
+            ->schema
+            ->getTableSchema(static::tableName());
+
+        return isset ($tableSchema->columns['network']);
+    }
+
+    protected function _securityFieldInstalled()
+    {
+        $tableSchema = static::getDb()
+            ->schema
+            ->getTableSchema(static::tableName());
+
+        return isset ($tableSchema->columns['security']);
+    }
+
+    protected function _roleFieldsInstalled()
+    {
+        $tableSchema = static::getDb()
+            ->schema
+            ->getTableSchema(static::tableName());
+
+        return isset ($tableSchema->columns['acontent']);
+    }
+
+    public static function getRoleFields()
+    {
+        return [
+            'atme',
+            'apm',
+            'acontent',
+            'axpm',
+            'apr',
+            'apresentations',
+            'agraphics',
+            'awebcast'
+        ];
+    }
+
+    public function beforeSave($insert)
+    {
+        $result = parent::beforeSave($insert); // TODO: Change the autogenerated stub
+
+        if ($this->objectives && is_array($this->objectives)) {
+            $this->objectives = implode(',', $this->objectives);
+        }
+
+        return $result;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $result = parent::afterSave($insert, $changedAttributes); // TODO: Change the autogenerated stub
+
+        if ($this->objectives
+            && is_string($this->objectives)
+        ) {
+            $this->objectives = explode(',', $this->objectives);
+        }
+
+        return $result;
+    }
+
+    public function afterFind()
+    {
+        $result = parent::afterFind(); // TODO: Change the autogenerated stub
+
+        if ($this->objectives
+            && is_string($this->objectives)
+        ) {
+            $this->objectives = explode(',', $this->objectives);
+        }
+
+        return $result;
     }
 }

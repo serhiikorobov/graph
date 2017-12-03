@@ -8,6 +8,9 @@ use \common\models\Event;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Product */
 /* @var $form yii\widgets\ActiveForm */
+
+$breakdownSource = new \common\models\product\source\Breakdown();
+
 ?>
 
 <div class="product-form">
@@ -79,6 +82,8 @@ use \common\models\Event;
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
     <?php echo $generateDateWidget('date_start'); ?>
+
+    <?= $form->field($model, 'breakdown')->dropDownList($breakdownSource->getOptions()) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>

@@ -9,6 +9,8 @@
 namespace common\models;
 
 
+use common\models\event\validator\OptionValidator;
+use common\models\product\source\Breakdown;
 use \Yii;
 use yii\db\ActiveRecord;
 
@@ -32,7 +34,7 @@ class Product extends ActiveRecord
     {
         $allFields = array_keys($this->attributeLabels());
 
-        return [
+        $rules = [
             [
                 ['name', 'date_start'],
                 'required'
@@ -57,19 +59,44 @@ class Product extends ActiveRecord
                 'value' => null
             ]
         ];
+
+        if ($this->_breakdownFieldInstalled()) {
+            $rules[] = [
+                ['breakdown'],
+                OptionValidator::className(),
+                'source_model' => Breakdown::className()
+            ];
+        }
+
+        return $rules;
     }
 
     public function attributeLabels()
     {
-        return [
+        $labels = [
             'name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'date_start' => Yii::t('app', 'Start Date'),
         ];
+
+        if ($this->_breakdownFieldInstalled()) {
+            $labels['breakdown'] = Yii::t('app', 'Breakdown');
+        }
+
+        return $labels;
     }
 
     public function attributeTooltip()
     {
         return [];
+    }
+
+    protected function _breakdownFieldInstalled()
+    {
+        $tableSchema = static::getDb()
+            ->schema
+            ->getTableSchema(static::tableName());
+
+        return isset ($tableSchema->columns['breakdown']);
     }
 }

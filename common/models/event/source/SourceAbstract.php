@@ -13,7 +13,7 @@ use yii\base\Object;
 
 abstract class SourceAbstract extends Object
 {
-    abstract function getOptions();
+    abstract public function getOptions($withDefault = true);
 
     public function getValues()
     {

@@ -18,6 +18,7 @@ $eventType = new \common\models\event\source\EventType();
 $tier = new \common\models\event\source\Tier();
 $objectivesSource = new \common\models\event\source\Objectives();
 $onlineReachSource = new \common\models\event\source\OnlineReach();
+$assignedRoleSource = new \common\models\event\source\Assigned();
 
 use kartik\datetime\DateTimePicker;
 
@@ -156,14 +157,32 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                 </div>
             </div>
 
-            <div class="form-group row">
+            <?php foreach (Event::getRoleFields() as $index => $roleField): ?>
+                <?php
+                    $roleCode = ltrim($roleField, 'a');
+                    $roleCode = strtoupper($roleCode);
+
+                    $index++;
+                ?>
+                <?php if ($index === 1 || $index % 5 === 0 || $index % 9 === 0): ?>
+                    <div class="form-group row">
+                <?php endif; ?>
+                <div class="col-md-3">
+                    <?= $form->field($model, $roleField)->dropDownList($assignedRoleSource->getRoleOption($roleCode)) ?>
+                </div>
+                <?php if ($index % 4 === 0 || $index % 8 === 0): ?>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <!--<div class="form-group row">
                 <div class="col-md-6">
                     <?= $form->field($model, 'atme')->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-md-6">
                     <?= $form->field($model, 'apm')->textInput(['maxlength' => true]) ?>
                 </div>
-            </div>
+            </div>-->
 
             <div class="form-group row">
                 <div class="col-md-4">
@@ -175,8 +194,8 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                 <div class="col-md-4">
                     <?= $form->field($model, 'event_type')->dropDownList($eventType->getOptions()) ?>
                 </div>
-
             </div>
+
 
 
         </div>
@@ -230,7 +249,10 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
                     <?= $form->field($model, 'number')->textInput(['maxlength' => true]); ?>
                 </div>
                 <div class="col-md-3">
-                    <?= $addTooltip($form->field($model, 'objectives'))->dropDownList($objectivesSource->getOptions()); ?>
+                    <?= $addTooltip($form->field($model, 'objectives'))->dropDownList($objectivesSource->getOptions(false), [
+                        'multiple' => true,
+                        //'size' => 4
+                    ]); ?>
                 </div>
                 <div class="col-md-3">
                     <?= $form->field($model, 'online_reach')->dropDownList($onlineReachSource->getOptions()); ?>
