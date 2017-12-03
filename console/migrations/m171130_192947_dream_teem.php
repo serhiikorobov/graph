@@ -23,7 +23,7 @@ class m171130_192947_dream_teem extends \console\models\Migration
         $userTableName = \common\models\User::tableName();
         $this->createTable($tableName, array(
             'id' => $this->primaryKey(),
-            'create_at' => $this->dateTime()->defaultExpression('NOW()'),
+            'create_at' => $this->dateTime(),
             'name' => $this->string(255)->notNull(),
             'email' => $this->string(255)->notNull(),
             'user_id' => $this->integer()

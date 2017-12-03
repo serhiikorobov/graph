@@ -62,6 +62,14 @@ class Member extends ActiveRecord
                 $allFields,
                 'default',
                 'value' => null
+            ],
+            [
+                ['create_at'],
+                'default',
+                'value' => function() {
+                    $dateTime = new \DateTime();
+                    return $dateTime->format(Event::DATETIME_INTERNAL_FORMAT);
+                }
             ]
         ];
 
@@ -99,5 +107,4 @@ class Member extends ActiveRecord
 
         return isset($table->columns['role_id']) ? true : false;
     }
-
 }
