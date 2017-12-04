@@ -29,6 +29,21 @@ class MemberController extends AuthController
         ];
     }
 
+    public function beforeAction($action)
+    {
+        $result = parent::beforeAction($action);
+
+        if ($result) {
+            $user = \Yii::$app->getUser()->getIdentity();
+            if ($user->role != \frontend\models\User::ROLE_SUPER_ADMIN) {
+                $result = false;
+                $this->goHome();
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * Lists all Member models.
      * @return mixed
