@@ -51,7 +51,7 @@ class Product extends ActiveRecord
             [
                 ['date_start'],
                 'date',
-                'format' => 'php:' . Event::DATETIME_DISPLAY_FORMAT
+                'format' => 'php:' . Event::DATE_DISPLAY_FORMAT
             ],
             [
                 $allFields,

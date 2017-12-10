@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\datetime\DateTimePicker;
 use \common\models\Event;
 
 /* @var $this yii\web\View */
@@ -55,17 +54,17 @@ $breakdownSource = new \common\models\product\source\Breakdown();
         } elseif ($model->$attribute) {
             $value = $model->$attribute;
             $value = \DateTime::createFromFormat(Event::DATETIME_INTERNAL_FORMAT, $value);
-            $value = $value->format(Event::DATETIME_DISPLAY_FORMAT);
+            $value = $value->format(Event::DATE_DISPLAY_FORMAT);
         }
 
-        echo DateTimePicker::widget([
+        echo \kartik\date\DatePicker::widget([
             'name' => $model->formName() . '[' . $attribute . ']',
             'options' => $options,
             'convertFormat' => true,
             'value' => $value,
             'pluginOptions' => [
-                'format' => Event::DATETIME_INTERNAL_FORMAT_JS,
-                'startDate' => $startDate ? $startDate->format(Event::DATETIME_DISPLAY_FORMAT) : false,
+                'format' => Event::DATE_INTERNAL_FORMAT_JS,
+                'startDate' => $startDate ? $startDate->format(Event::DATE_DISPLAY_FORMAT) : false,
                 //'todayHighlight' => true,
                 'autoclose'=>true
             ]

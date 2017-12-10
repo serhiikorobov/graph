@@ -39,11 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'website',
             [
                 'attribute' => 'date_start',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
             [
                 'attribute' => 'date_end',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
             'location:ntext',
             'venue_name:ntext',
@@ -64,28 +64,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'stage',
             [
                 'attribute' => 'logistics_date_start',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
             [
                 'attribute' => 'logistics_date_end',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
             [
                 'attribute' => 'tear_down_date_start',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
             [
                 'attribute' => 'tear_down_date_end',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
             'logistics',
             [
                 'attribute' => 'arrival_date',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
             [
                 'attribute' => 'departure_date',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
             'layout_stage:ntext',
             'layout_demo_area:ntext',

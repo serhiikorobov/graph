@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             [
                 'attribute' => 'date_start',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
             ],
         ],
         'formatter' => [

@@ -15,6 +15,7 @@ use common\models\event\source\EventType;
 use common\models\event\source\LevelOfSupport;
 use common\models\event\source\Logistics;
 use common\models\event\source\Objectives;
+use common\models\event\source\ProductFocus;
 use common\models\event\source\Tier;
 use common\models\event\source\TypeServices;
 use common\models\event\source\YesNo;
@@ -93,10 +94,12 @@ use \Yii;
  */
 class Event extends ActiveRecord
 {
-    const DATE_INTERNAL_FORMAT = 'n/j/Y';
+    const DATE_INTERNAL_FORMAT = 'yyyy-MM-dd';
     const DATETIME_INTERNAL_FORMAT = 'Y-m-d H:i:s';
     const DATETIME_DISPLAY_FORMAT = 'Y-m-d H:i';
+    const DATE_DISPLAY_FORMAT = 'Y-m-d';
     const DATETIME_INTERNAL_FORMAT_JS = 'yyyy-MM-dd HH:mm';
+    const DATE_INTERNAL_FORMAT_JS = 'yyyy-MM-dd';
 
     public static function tableName()
     {
@@ -184,7 +187,7 @@ class Event extends ActiveRecord
                     'departure_date'
                 ],
                 'date',
-                'format' => 'php:' . self::DATETIME_DISPLAY_FORMAT
+                'format' => 'php:' . self::DATE_DISPLAY_FORMAT
             ],
             [
                 ['audience'],
@@ -300,6 +303,14 @@ class Event extends ActiveRecord
             }
         }
 
+        if ($this->_productFocusFieldInstalled()) {
+            $rules[] = [
+                ['product_focus'],
+                OptionValidator::className(),
+                'source_model' => ProductFocus::className()
+            ];
+        }
+
         return $rules;
     }
 
@@ -388,6 +399,12 @@ class Event extends ActiveRecord
                 'apresentations' => Yii::t('app', 'Assigned Presentations'),
                 'agraphics' => Yii::t('app', 'Assigned Graphics'),
                 'awebcast' => Yii::t('app', 'Assigned Webcast')
+            ];
+        }
+
+        if ($this->_productFocusFieldInstalled()) {
+            $labels += [
+                'product_focus' => Yii::t('app', 'Product Focus')
             ];
         }
 
@@ -537,6 +554,15 @@ class Event extends ActiveRecord
             ->getTableSchema(static::tableName());
 
         return isset ($tableSchema->columns['acontent']);
+    }
+
+    protected function _productFocusFieldInstalled()
+    {
+        $tableSchema = static::getDb()
+            ->schema
+            ->getTableSchema(static::tableName());
+
+        return isset ($tableSchema->columns['product_focus']);
     }
 
     public static function getRoleFields()

@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             'short_name',
             //'description:ntext',
             //'website',
@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'date_start',
-                'format' => ['date', 'php:' . \common\models\Event::DATETIME_DISPLAY_FORMAT],
+                'format' => ['date', 'php:' . \common\models\Event::DATE_DISPLAY_FORMAT],
                 'filter' => false
             ],
             ['class' => 'yii\grid\ActionColumn'],

@@ -31,14 +31,14 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'Overview',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        //['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'Dream Team', 'url' => ['/dreamteam/index']]
         //['label' => 'Products', 'url' => ['/product']],
         //['label' => 'Import', 'url' => ['/import/index']]
@@ -65,20 +65,23 @@ AppAsset::register($this);
         /* @var $user \common\models\User */
         $user = Yii::$app->getUser()->getIdentity();
         if ($user->isAdmin()) {
-            $menuItems[] = ['label' => 'Users', 'url' => ['/user/index']];
             $menuItems[] = [
-                'label' => 'Members',
-                'url' => ['member/index']
-            ];
-
-            $menuItems[] = [
-                'label' => 'Roles',
-                'url' => ['member/role/index']
-            ];
-
-            $menuItems[] = [
-                'label' => 'Member visibility',
-                'url' => ['member/visibility/index']
+                'label' => 'Admin section',
+                'items' => [
+                    ['label' => 'Logins', 'url' => ['/user/index']],
+                    [
+                        'label' => 'Members',
+                        'url' => ['member/index']
+                    ],
+                    [
+                        'label' => 'Roles',
+                        'url' => ['member/role/index']
+                    ],
+                    [
+                        'label' => 'Member visibility',
+                        'url' => ['member/visibility/index']
+                    ]
+                ]
             ];
         }
 

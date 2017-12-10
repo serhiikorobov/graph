@@ -19,8 +19,7 @@ $tier = new \common\models\event\source\Tier();
 $objectivesSource = new \common\models\event\source\Objectives();
 $onlineReachSource = new \common\models\event\source\OnlineReach();
 $assignedRoleSource = new \common\models\event\source\Assigned();
-
-use kartik\datetime\DateTimePicker;
+$productFocusSource = new \common\models\event\source\ProductFocus();
 
 $addTooltip = function (\yii\widgets\ActiveField $field) {
     /*$field->inputOptions['title'] = 'korobov';
@@ -91,18 +90,18 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
             $value = $model->$attribute;
             $value = \DateTime::createFromFormat(Event::DATETIME_INTERNAL_FORMAT, $value);
             if ($value) {
-                $value = $value->format(Event::DATETIME_DISPLAY_FORMAT);
+                $value = $value->format(Event::DATE_DISPLAY_FORMAT);
             }
         }
 
-        echo DateTimePicker::widget([
+        echo \kartik\date\DatePicker::widget([
             'name' => $model->formName() . '[' . $attribute . ']',
             'options' => $options,
             'convertFormat' => true,
             'value' => $value,
             'pluginOptions' => [
-                'format' => Event::DATETIME_INTERNAL_FORMAT_JS,
-                'startDate' => $startDate ? $startDate->format(Event::DATETIME_DISPLAY_FORMAT) : false,
+                'format' => Event::DATE_INTERNAL_FORMAT_JS,
+                'startDate' => $startDate ? $startDate->format(Event::DATE_DISPLAY_FORMAT) : false,
                 //'todayHighlight' => true,
                 'autoclose'=>true
             ]
@@ -124,11 +123,14 @@ $addTooltip = function (\yii\widgets\ActiveField $field) {
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="basic_info">
             <div class="form-group row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <?= $form->field($model, 'tier')->dropDownList($tier->getOptions()) ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $form->field($model, 'product_focus')->dropDownList($productFocusSource->getOptions()) ?>
                 </div>
             </div>
 

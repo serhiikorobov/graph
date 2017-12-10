@@ -27,7 +27,7 @@ $roleOptions = new \common\models\member\source\Role();
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            //'id',
             //'create_at',
             'name',
             'email:email',
