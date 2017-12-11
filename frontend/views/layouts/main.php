@@ -113,9 +113,10 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">Version 1.1.1</p>
 
-        <p class="pull-right"><?= 'Powered by KSP' //Yii::powered() ?></p>
+
+        <p class="pull-right"><?= 'Global Communications Ecosystem Marketing' //Yii::powered() ?></p>
     </div>
 </footer>
 
