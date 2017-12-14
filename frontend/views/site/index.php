@@ -19,7 +19,7 @@ $this->registerJsFile('//cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/j
                 <?php foreach ($model->getErrors() as $field => $fieldErrors): ?>
                     <div class="alert alert-danger" role="alert"><?php echo implode('. ', $fieldErrors) ?></div>
                 <?php endforeach; ?>
-                <?php if (!$dataExist): ?>
+                <?php if (!isset($dataExist)): ?>
                     <div class="alert alert-danger" role="alert">Any data does not find!</div>
                 <?php endif; ?>
             </div>

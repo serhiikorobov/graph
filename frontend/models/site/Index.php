@@ -55,7 +55,7 @@ class Index extends Model
             [
                 ['filter_date'],
                 'date',
-                'format' => self::DATE_INPUT_FORMAT
+                'format' => 'php:' . self::DATE_INPUT_FORMAT
 
             ]
         ];

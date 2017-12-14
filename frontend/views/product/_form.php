@@ -36,13 +36,6 @@ $breakdownSource = new \common\models\product\source\Breakdown();
             $isRequired = true;
         }
 
-        $startDate = null;
-        if ($model->$attribute) {
-            if ($startDate = \DateTime::createFromFormat(Event::DATETIME_INTERNAL_FORMAT, $model->$attribute)) {
-                $startDate->sub(new \DateInterval('P1D'));
-            }
-        }
-
         echo '<div class="form-group field-event-' . $attribute . ' ' . ($model->hasErrors($attribute) ? 'has-error' : '') . ($isRequired ? ' required' : '') . '">';
 
         echo Html::activeLabel($model, $attribute);
@@ -52,9 +45,13 @@ $breakdownSource = new \common\models\product\source\Breakdown();
             //$value = new \DateTime();
             //$value = $value->format(Event::DATETIME_INTERNAL_FORMAT);
         } elseif ($model->$attribute) {
-            $value = $model->$attribute;
-            $value = \DateTime::createFromFormat(Event::DATETIME_INTERNAL_FORMAT, $value);
-            $value = $value->format(Event::DATE_DISPLAY_FORMAT);
+            $value = \DateTime::createFromFormat(Event::DATETIME_INTERNAL_FORMAT, $model->$attribute);
+            if (!$value) {
+                $value = \DateTime::createFromFormat(Event::DATE_DISPLAY_FORMAT, $model->$attribute);
+            }
+            if ($value ) {
+                $value = $value->format(Event::DATE_DISPLAY_FORMAT);
+            }
         }
 
         echo \kartik\date\DatePicker::widget([
@@ -64,7 +61,6 @@ $breakdownSource = new \common\models\product\source\Breakdown();
             'value' => $value,
             'pluginOptions' => [
                 'format' => Event::DATE_INTERNAL_FORMAT_JS,
-                'startDate' => $startDate ? $startDate->format(Event::DATE_DISPLAY_FORMAT) : false,
                 //'todayHighlight' => true,
                 'autoclose'=>true
             ]
